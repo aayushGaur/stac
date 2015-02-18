@@ -12,7 +12,6 @@ body {
 	position: absolute;
 	width: 103px;
 	left:16px;
-	padding-top:3px;
 	top:2px;
 	display: none;
 	border:2px solid grey;
@@ -280,5 +279,6 @@ body {
 .buttonGroupLabels {
 	border-top: 2px solid grey;
 	border-bottom: 2px solid grey;
-	text-align:center;
+	text-align:left;
+	padding:2px;
 } 

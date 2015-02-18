@@ -277,5 +277,9 @@ VIEWS.SharedFunctionality = (function(){
 			var vis = d3.select("g");
 			vis .transition().duration(750) .attr("transform", "translate(" + zoom.translate() + ") scale(" + zoom.scale() + ")");
 		},
+	
+		refreshCurrentPage : function() {
+			window.open(document.URL,"_self");
+		},
 	};
 })();

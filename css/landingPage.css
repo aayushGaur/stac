@@ -35,6 +35,9 @@
 	width: 100%;
 	text-align: center;
 	padding: 0.8em;
+	display:flex;
+	position:relative;
+	left: calc(50% - 229.5px);
 }
 
 .demoButton {
@@ -87,6 +90,7 @@
 	padding: 3px;
 	color: gray;
 	cursor:pointer;
+	margin:3px;
 }
 
 .landingPageDemoButton:hover {
@@ -168,3 +172,24 @@
 .landingPageButton {
 background:#f2f2f2;
 }
+
+
+.landingPageDemoImage {
+	height:1in;
+	width:1in;
+	margin-bottom:4px;
+}
+
+/*.landingPageDemoImage:hover {
+    -webkit-transform:scale(1.25);
+    -moz-transform:scale(1.25);
+    -ms-transform:scale(1.25);
+    -o-transform:scale(1.25);
+     transform:scale(1.25);
+}*/
+
+
+.landingPageDemoImage96 { background-image:url('../resources/RTS96-div.png'); }
+.landingPageDemoImage76 { background-image:url('../resources/RTS76-div.png'); }
+.landingPageDemoImage118 {  background-image:url('../resources/IEEE118-div.png'); }
+.landingPageDemoImage14 {  background-image:url('../resources/IEEE14-div.png'); }​​

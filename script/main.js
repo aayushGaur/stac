@@ -213,8 +213,8 @@ function preProcessNetworkUI() {
 		
 		var h = $("#dropInput").height();
 		var w = $("#dropInput").width();
-		var top = (p.top + h/2);
-		var left = (p.left + w/2) + marginLeft; 
+		var top = (p.top + h/2)-22;
+		var left = (p.left + w/2) + marginLeft-18; 
 		$("#LoadSnippet").css({'top': top, 'left': left, 'position':'absolute', 'z-index':'100'});
 	}
 	else {
@@ -231,7 +231,7 @@ function preProcessNetworkUI() {
 		
 		$("#LoadSnippet").show();
 		var top = (h/2);
-		var left = (w/2);
+		var left = (w/2)+100;
 		$("#LoadSnippet").css({'top': top, 'left': left, 'position':'absolute', 'z-index':'100'});
 	}
 }
