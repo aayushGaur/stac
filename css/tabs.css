@@ -1,0 +1,78 @@
+#tab-container{
+    font-size: 12px;
+	display:none;
+}
+ol, ul, li{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+    font-style:inherit;
+    font-weight:inherit;
+	vertical-align: baseline;
+	list-style: none;
+}
+
+ul.tab-menu li{
+    display: block;
+    float: left;
+    position: relative;
+    font-weight: 700;
+    padding: 5px 10px 5px 10px;
+    background: #eee;
+    border: 1px solid #ddc;
+    color: #999;
+    cursor: default;
+    height: 14px;
+    margin-right: 2px;
+    border-radius: 3px;
+    
+}
+li:ctive{
+    background: red;
+    color: #0088CC;
+    height: 15px;
+}
+
+.tab-top-border {
+    border-bottom: 1px solid #d0ccc9;
+}
+.tab-content{
+    margin: 0 auto;
+    background: #efefef;
+    background: #fff;
+    border: 1px solid #ddc;
+    border-top-style: none;
+    text-align: left;
+    padding: 10px;
+    padding-bottom: 20px;
+    font-size: 11px;
+    display: none;
+    height: 250px;
+}
+#tab-container div.active{
+    display: block;
+}
+.tab-content h1{
+    line-height: 1em;
+    height: 28px;
+    font-size: 22px;
+}
+
+.dropAlongWithGraphTopology {
+	top: calc(85% + 40px);
+	height: 40px;
+	min-height: 56px;
+	position: absolute;
+	display: block;
+	border-radius:0px;
+}
+
+.dropAlongWithGraphConfig {
+	top: calc(104% + 40px);
+	height: 10%;
+	min-height: 56px;
+	position: absolute;
+	display: block;
+}

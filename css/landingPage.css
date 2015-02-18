@@ -1,0 +1,170 @@
+.standardNetworkGroup {
+	margin-bottom: 10px;
+	width: 98%
+}
+
+.marginBottomZero {
+	margin-bottom:0px;
+}
+
+.allMarginZero {
+	margin:0px;
+}
+
+.center {
+	width: 100%;
+	text-align: center;
+}
+.centreHeading1 {
+	width:100%;
+	text-align: center;
+	font-size: 1.5em;
+	margin-top: 0.0em;
+	margin-bottom: 0.8em;
+}
+
+.centreHeading2 {
+	width:100%;
+	text-align: center;
+	font-size: 1em;
+	margin-top: 0.0em;
+	margin-bottom: 0.0em;
+}
+
+.centerButtonGroup {
+	width: 100%;
+	text-align: center;
+	padding: 0.8em;
+}
+
+.demoButton {
+	display: block;
+	border: 2px solid gray;
+    border-radius: 5px;
+	padding: 3px;
+	color: gray;
+	cursor:pointer;
+	margin:3px;
+}
+
+.demoButton:hover {
+	color: white;
+	background:grey;
+}
+
+.demoButtonZoom {
+	display: inline;
+	padding: 3px;
+	color: gray;
+	cursor:pointer;
+	margin:3px;
+}
+
+.demoButtonZoom:hover {
+	color: white;
+	background:grey;
+}
+.navigateButtons {
+	position:relative;
+	top:calc(100% - 107px);
+}
+.activeButton {	
+	display: block;
+	border: 2px solid gray;
+	color: white;
+	background:grey;
+    border-radius: 5px;
+	padding: 3px;
+}
+
+.activeButton:hover {	
+}
+
+.landingPageDemoButton {
+	display: inline;
+	border: 2px solid gray;
+    border-radius: 5px;
+	padding: 3px;
+	color: gray;
+	cursor:pointer;
+}
+
+.landingPageDemoButton:hover {
+	color: white;
+	background:grey;
+}
+
+.dropEnabled {
+	border: 2px solid grey;
+	height: 30%;
+	width: calc(70%);
+	margin-left: 15%;
+	text-align: center;
+	font-size:1.5em;
+	border-radius:25px;
+}
+
+.dropEnabled p{
+	top: 45%;
+	position: relative;
+	margin:0;
+}
+
+.developedInfo {
+	text-align: center;
+}
+
+.landingLogoNicta {
+	height: 60px;
+	width: 60px;
+}
+
+.landingLogoMonash {
+	height: 55px;
+	width: 174px;
+	margin-left:20px;
+}
+
+#loadingImage {
+    -webkit-animation: rotation 2s infinite linear;
+}
+
+@-webkit-keyframes rotation {
+    from {-webkit-transform: rotate(0deg);}
+    to   {-webkit-transform: rotate(359deg);}
+}
+
+/***Investigative region for Overlay***/
+.overlay {
+    opacity : 0.7;
+    background : rgba(172, 172, 172, 1);
+    ;
+    width : 100%;
+    height : 100%;
+    z-index : 10;
+    top : 0;
+    left : 0;
+    position : fixed;
+    text-align : center;
+    display : none;
+    
+    .center {
+        top:50%;
+        position : relative;
+        background : $dark-grey1;
+        margin-top : -60px;
+    }
+    p {
+        padding : 25px;
+        color : white;
+        text-align : center;
+        font-size : 1.5em;
+        font-style : italic;
+        font-weight : normal;
+    }
+}
+/***Investigative region ends***/
+
+.landingPageButton {
+background:#f2f2f2;
+}

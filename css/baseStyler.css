@@ -1,0 +1,284 @@
+/**************css for the layout of the page***************/
+body {
+   font-family: sans-serif;
+}
+.dynamicLabels
+{
+	text: 10px;
+}
+#d3div
+{
+	height: 94%;
+	position: absolute;
+	width: 103px;
+	left:16px;
+	padding-top:3px;
+	top:2px;
+	display: none;
+	border:2px solid grey;
+	text-align:center;
+}
+
+.floatLeftDiv {
+	width:100%;
+	text-align:center;
+	height:33%;
+	min-height: 150px;
+}
+.floatCenterDiv {
+	width:100%;
+	text-align:center;
+	top:33%;
+	height:33%;
+	min-height: 150px;
+}
+.floatRightDiv {
+	width:100%;
+	top:66%;
+	height:33%;
+	min-height: 150px;
+}
+
+#svgGraph
+{
+	width:99%;
+	overflow: auto;
+	height:99%
+}
+
+#parentSvgNode
+{
+	width:calc(99% - 145px);
+	overflow: auto;
+	height:95%;
+	top:2px;
+	position: absolute;
+	left: 135px;
+	margin-right:16px;
+}
+
+.node {
+	fill: white;
+	stroke: black;
+	stroke-width: 2.5px;
+	cursor: grab;
+	cursor: -webkit-grab;
+}
+
+.edge {
+  stroke: black;
+  stroke-width: 1.5px;
+  stroke-opacity: 1;
+}
+
+.edgeConnector {
+	stroke: black;
+	stroke-width: 1.5px;
+	stroke-opacity: 1;
+}
+
+.label {
+    fill: Black;
+    font-size: 10px;
+    text-anchor: middle;
+    cursor: grab;
+	cursor: -webkit-grab
+}
+
+/*** CSS for the Incremental Graph ***/
+.background {
+    fill: white;
+	cursor:move;
+}
+.incrementalExploration.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+/*** Following section of the css is used to display the content on the page in the desired format ***/
+.divBoxLook
+{
+	border: 1px blue;
+	display:block;
+}
+
+
+/*** Region Begins - Investigative code ***/
+.bar {
+    position: relative;
+    width: 40px;
+    height: 5px;
+    text-align: center;
+    line-height: 2px;
+    background: grey;
+    color: back;
+	display:none;
+}
+
+.bar:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 60%;
+    width: attr(data-value %, 0); /* If this is not supported then go to hard coded value. */
+    content: '';
+    background: red;
+}
+
+.bar:after {
+    content: attr(data-value) "%";
+	font-size: 10px;
+}
+
+#tooltip {
+	z-index: 1;
+	position: absolute;
+	width: auto;
+	height: auto;
+	padding: 6.5px;
+	background-color: white;
+	opacity: 1;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	pointer-events: none;
+}
+.toolTipWarning {
+	border: 1px orange solid;
+	margin-top:2px;
+	font-size:.74em;
+	overflow-wrap:break-word;
+	width:100%;
+}
+.toolTipError {
+	border: 1px red solid;
+	margin-top:2px;
+	font-size:.74em;
+	width:100%;
+	overflow-wrap:break-word;
+}
+			
+#tooltip.hidden {
+	display: none;
+}
+		
+#tooltip strong {
+	margin: 0;
+	font-size: .8em;
+	line-height: 1.3;
+}
+#tooltip span {
+	margin: 0;
+	font-size: .8em;
+	line-height: 1.3;
+}
+/**Investigative Code Region ends**/
+
+.decorators {
+	stroke: black;
+	stroke-width: 1.5px;
+}
+;
+.bottomDecorator {
+}
+
+.topDecorator {
+}
+
+.topDecoCircle {
+	stroke-width: 1px;		
+	fill : white;
+}
+.topDecoratorGroup {
+	stroke : black;
+}
+
+/***** Region CSS for styling the edges *****/
+.edgeDecorator {
+	fill: white;
+	stroke: black;
+	stroke-width: 1px;
+}
+
+.tranformerEdgeDecoratorWrapper {
+	fill: transparent;
+}
+/***** End Region *****/
+
+/*****Region CSS - for Off Status*****/
+.labelText {
+	fill : black;
+	stroke-width : .1px;
+	font-size : x-small;
+}
+.OffStatusTopDecoLabel {
+	fill:lightgray;
+}
+.loadPolygon {
+	stroke-width : 1px;
+	fill : black;
+	stroke : black;
+}
+
+.loadMarker {
+	stroke:black;
+}
+
+.lineChargeStop20Black {
+	offset : 20%;
+	stop-color : black; 
+	stop-opacity:1;
+}
+.lineChargeStop80Black {
+	offset : 80%;
+	stop-color : black; 
+	stop-opacity:1;
+}
+/**IMPORTANT**/
+/**This class has to be kept at the end of the file so that when applied the effect of the class takes place at the end and the Objects with Off Status are displayed as grey**/
+.OffStatusLoadPolygon {
+	stroke:grey;
+	color:grey;
+	fill:lightgray;
+}
+.OffStatus {
+	stroke:lightgray;
+	color:grey;
+}
+/*****Region Ends*****/
+
+.ui-state-focus
+{
+    color:White;
+    background:darkgrey;
+    outline:none;
+}
+
+.loggedErrors:hover {
+	color:White;
+    background:darkgrey;
+    outline:none;
+}
+
+.loggedWarnings:hover {
+	color:White;
+    background:darkgrey;
+    outline:none;
+}
+.loggedErrors {
+	cursor:pointer;
+}
+
+.loggedWarnings {
+	cursor:pointer;
+}
+
+.buttonGroupLabels {
+	border-top: 2px solid grey;
+	border-bottom: 2px solid grey;
+	text-align:center;
+} 
