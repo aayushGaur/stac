@@ -46,58 +46,59 @@
 				<div id="developedInfo">
 					<h3 class="center marginBottomZero">Developed at,</h3>
 					<div class="center">
-					<a href="http://org.nicta.com.au/"><img src="./resources/NICTA-logo.png" alt="NICTA" class="landingLogoNicta" title="Largest organisation dedicated to ICT research in Australia."/></a>
-					<a href="http://www.infotech.monash.edu.au/">
-						<img src="./resources/Monash-logo.png" alt="MONASH" class="landingLogoMonash" title="Ranked in the top 1% of the world universities,  &#10;(Times Higher Education World University Rankings)."/>
-					</a>
+						<a href="http://org.nicta.com.au/"><img src="./resources/NICTA-logo.png" alt="NICTA" class="landingLogoNicta" title="Largest organisation dedicated to ICT research in Australia."/></a>
+						<a href="http://www.infotech.monash.edu.au/">
+							<img src="./resources/Monash-logo.png" alt="MONASH" class="landingLogoMonash" title="Ranked in the top 1% of the world universities,  &#10;(Times Higher Education World University Rankings)."/>
+						</a>
+					</div>
+					<div>
+						<h3 class="center marginBottomZero">Built on - &nbsp;&nbsp;
+							<a href="http://d3js.org/">D3</a> &nbsp;&nbsp;&nbsp;
+							<a href='http://marvl.infotech.monash.edu/webcola/'>Web Cola</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="https://github.com/aayushGaur/stac">Source Code</a> (Best viewed in Chrome)
+						</h3>
+					</div>
 				</div>
-				<div>
-					<h3 class="center marginBottomZero">Built on - &nbsp;&nbsp;
-						<a href="http://d3js.org/">D3</a> &nbsp;&nbsp;&nbsp;
-						<a href='http://marvl.infotech.monash.edu/webcola/'>Web Cola</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<a href="https://github.com/aayushGaur/stac">Source Code</a>(Best viewed in Chrome)
-					</h3>
 			</div>
-		</div>
-		<div id="tooltip" class="hidden"></div>
+			<div id="tooltip" class="hidden"></div>
 		
-		<div id="d3div">
-			<div class="floatLeftDiv">
-				<div id="homeButton" onclick="VIEWS.SharedFunctionality.refreshCurrentPage()" class="demoButton">Home</div>
-				<div class="buttonGroupLabels"> Views </div>
-				<div id="dataView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton activeButton">Topology</div>
-				<div id="dataValidationView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton">Validation</div>
-			</div>
-			<div class="floatCenterDiv">
-				<div class="buttonGroupLabels"> Layout </div>
-				<div id="autoLayoutToggle" onclick="VIEWS.SharedFunctionality.toggleAutoLayout()" class="demoButton activeButton">Auto</div>
-				<div id="saveLayout" class="demoButton" style="margin-right:3px;">
-					<a id="AutoDownloadLayout" href="#" download="Layout.txt" onclick="VIEWS.SharedFunctionality.showLayout()">Export</a>
+			<div id="d3div">
+				<div class="floatLeftDiv">
+					<div id="homeButton" onclick="VIEWS.SharedFunctionality.refreshCurrentPage()" class="demoButton">Home</div>
+					<div class="buttonGroupLabels"> Views </div>
+					<div id="dataView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton activeButton">Topology</div>
+					<div id="dataValidationView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton">Validation</div>
 				</div>
-				<div id="fixedPosition" onclick="VIEWS.SharedFunctionality.toggleFixedPosition()" class="demoButton">Initial</div>
-			</div>
-			<div class="floatRightDiv">
-				<div class="buttonGroupLabels" style="margin-bottom:3px;"> Search </div>
-				<div style="display:inline; cursor:text;">
-					<input id="tags" class="demoButton" placeholder="Enter Bus ID" style="width:98px; cursor:text;">
+				<div class="floatCenterDiv">
+					<div class="buttonGroupLabels"> Layout </div>
+					<div id="autoLayoutToggle" onclick="VIEWS.SharedFunctionality.toggleAutoLayout()" class="demoButton activeButton">Auto</div>
+					<div id="saveLayout" class="demoButton" style="margin-right:3px;">
+						<a id="AutoDownloadLayout" href="#" download="Layout.txt" onclick="VIEWS.SharedFunctionality.showLayout()">Export</a>
+					</div>
+					<div id="fixedPosition" onclick="VIEWS.SharedFunctionality.toggleFixedPosition()" class="demoButton">Initial</div>
 				</div>
-				<div class="navigateButtons">
-					<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(false)" class="demoButton demoButtonZoom fontAwesome">&#xf00e;</div>
-					<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(true)" class="demoButton demoButtonZoom fontAwesome">&#xf010;</div>
-					<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.zoomToFit()" class="demoButton" style="margin-top:8px;">Auto Fit</div>
+				<div class="floatRightDiv">
+					<div class="buttonGroupLabels" style="margin-bottom:3px;"> Search </div>
+					<div style="display:inline; cursor:text;">
+						<input id="tags" class="demoButton" placeholder="Enter Bus ID" style="width:98px; cursor:text;">
+					</div>
+					<div class="navigateButtons">
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(false)" class="demoButton demoButtonZoom fontAwesome">&#xf00e;</div>
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(true)" class="demoButton demoButtonZoom fontAwesome">&#xf010;</div>
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.zoomToFit()" class="demoButton" style="margin-top:8px;">Auto Fit</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		
-		<div id="LogErrorsWarnings">
-			<input id="ewSearch" class="demoButton" placeholder="Please enter the search text." style="width: 98%;margin-left: 1%; text-align: center;">
-			<div id="ErrorLogs"></div>
-			<div id="WarningLogs"></div>
-		</div>
-		
-		<div id="LoadSnippet" style="display: none; height:300px; width:300px;">
-			<img id="loadingImage" src="./resources/loading_anim.png" height="48" width="48">
-		</div>
+			
+			<div id="LogErrorsWarnings">
+				<input id="ewSearch" class="demoButton" placeholder="Please enter the search text." style="width: 98%;margin-left: 1%; text-align: center;">
+				<div id="ErrorLogs"></div>
+				<div id="WarningLogs"></div>
+			</div>
+			
+			<div id="LoadSnippet" style="display: none; height:300px; width:300px;">
+				<img id="loadingImage" src="./resources/loading_anim.png" height="48" width="48">
+			</div>
 		<!--
 			Yahoo Tree view - to be used for logging the errors.
 			http://yuilibrary.com/gallery-archive/gallery/show/yui3treeview.html
