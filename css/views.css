@@ -95,8 +95,12 @@ a#AutoDownloadLayout:hover {
 	display : none;
 	border : 2px grey solid;
 	top: calc(95% + 4px);
+	top: -webkit-calc(95% + 4px);
+    top: -moz-calc(95% + 4px);
 	height: auto;
 	width: calc(99% - 4px);
+	width: -webkit-calc(99% - 4px);
+    width: -moz-calc(99% - 4px);
 	position: absolute;
 }
 /*****End Region*****/

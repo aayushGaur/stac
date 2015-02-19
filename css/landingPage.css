@@ -35,8 +35,15 @@
 	width: 100%;
 	text-align: center;
 	padding: 0.8em;
-	display:flex;
+	display: flex;
+    display: -webkit-box;
+    display: moz-box-flex;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+	flex-wrap: wrap;
 	position:relative;
+	left: -webkit-calc(50% - 229.5px);
+    left: -moz-calc(50% - 229.5px);
 	left: calc(50% - 229.5px);
 }
 
@@ -69,6 +76,8 @@
 }
 .navigateButtons {
 	position:relative;
+	top: -webkit-calc(100% - 107px);
+    top: -moz-calc(100% - 107px);
 	top:calc(100% - 107px);
 }
 .activeButton {	
@@ -102,6 +111,8 @@
 	border: 2px solid grey;
 	height: 30%;
 	width: calc(70%);
+	width: -webkit-calc(70%);
+    width: -moz-calc(70%);
 	margin-left: 15%;
 	text-align: center;
 	font-size:1.5em;

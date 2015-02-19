@@ -62,6 +62,8 @@ li:ctive{
 
 .dropAlongWithGraphTopology {
 	top: calc(85% + 40px);
+	top: -webkit-calc(85% + 40px);
+    top: -moz-calc(85% + 40px);
 	height: 40px;
 	min-height: 56px;
 	position: absolute;
@@ -71,6 +73,8 @@ li:ctive{
 
 .dropAlongWithGraphConfig {
 	top: calc(104% + 40px);
+	top: -webkit-calc(104% + 40px);
+    top: -moz-calc(104% + 40px);
 	height: 10%;
 	min-height: 56px;
 	position: absolute;

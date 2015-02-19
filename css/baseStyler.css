@@ -48,6 +48,8 @@ body {
 #parentSvgNode
 {
 	width:calc(99% - 145px);
+	width: -webkit-calc(99% - 145px);
+    width: -moz-calc(99% - 145px);
 	overflow: auto;
 	height:95%;
 	top:2px;
