@@ -16,10 +16,10 @@
 		
 		<script type="text/javascript" src="script/Network.js"></script>
 		<script type="text/javascript" src="script/utils/Logger.js"></script>
-		<script type="text/javascript" src="script/utils/searchBoxes.js"></script>
 		
 		<script type="text/javascript" src="script/ObjectFactory/dataObjects.js" ></script>
 		<script type="text/javascript" src="script/ObjectFactory/dataObjValidator.js" ></script>
+		<script type="text/javascript" src="script/ObjectFactory/dataObjSolutionUpdater.js" ></script>
 	</head>
 	<body>
 		<div class="overlay">
@@ -68,6 +68,7 @@
 					<div class="buttonGroupLabels"> Views </div>
 					<div id="dataView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton activeButton">Topology</div>
 					<div id="dataValidationView" onclick="VIEWS.SharedFunctionality.switchTabs(event)" class="demoButton">Validation</div>
+					<div id="solutionView" onclick="VIEWS.SolutionView.displayView(event)" class="demoButton">Flow</div>
 				</div>
 				<div class="floatCenterDiv">
 					<div class="buttonGroupLabels"> Layout </div>
@@ -83,9 +84,10 @@
 						<input id="tags" class="demoButton" placeholder="Enter Bus ID" style="width:98px; cursor:text;">
 					</div>
 					<div class="navigateButtons">
-						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(false)" class="demoButton demoButtonZoom fontAwesome">&#xf00e;</div>
-						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(true)" class="demoButton demoButtonZoom fontAwesome">&#xf010;</div>
-						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.zoomToFit()" class="demoButton" style="margin-top:8px;">Auto Fit</div>
+						<div id="showHelp" onclick="VIEWS.SharedFunctionality.showHelp()" class="demoButton demoButtonZoom fontAwesome" style="display:inline" title="Click to show help Graph">&#xf059;</div>
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(false)" class="demoButton demoButtonZoom fontAwesome" title="Zoom In">&#xf00e;</div>
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.buttonZoom(true)" class="demoButton demoButtonZoom fontAwesome" title="Zoom Out">&#xf010;</div>
+						<div id="doubleClickToFit" onclick="VIEWS.SharedFunctionality.zoomToFit(true)" class="demoButton" style="margin-top:8px;">Auto Fit</div>
 					</div>
 				</div>
 			</div>
@@ -104,7 +106,7 @@
 			http://yuilibrary.com/gallery-archive/gallery/show/yui3treeview.html
 		-->
 		<script type="text/javascript" src="script/main.js"></script>
-		<script type="text/javascript" src="script/utils/Rules.js"  ></script>
+		<script type="text/javascript" src="script/utils/Rules.js"></script>
 		<script type="text/javascript" src="script/Graph/disconnectedGraphWithNonOverLapConstraints.js"></script>
 		<script type="text/javascript" src="script/utils/toolTipGenerator.js" ></script>
 		
@@ -118,6 +120,7 @@
 		<script type="text/javascript" src="script/Views/baseView.js"></script>
 		<script type="text/javascript" src="script/Views/dataView.js"></script>
 		<script type="text/javascript" src="script/Views/validationView.js"></script>
+		<script type="text/javascript" src="script/Views/SolutionView.js"></script>
 		<!-- Region Ends-->
 		
 		<!--Region Begins : Files for generating the Edges for the graph -->

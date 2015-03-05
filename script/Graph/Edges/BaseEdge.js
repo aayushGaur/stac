@@ -61,10 +61,11 @@
 	
 	NETWORK.GRAPH.Edges.prototype.tick = function(){
 		this.moveEdges();
-		this.moveDecorator();
+		this.moveDecorator();		
 	};
 	
 	NETWORK.GRAPH.Edges.prototype.moveEdges = function(){
+		
 		this.edges.each(function (d) {d3.select(this).attr({"x1": d.source.x, "y1": d.source.y, "x2": d.target.x, "y2": d.target.y }); });
 		
 		this.edges.each(function (d) {d3.select(this).attr({"zoomPointX": (d.source.x + d.target.x)/2, "zoomPointY" : (d.source.y + d.target.y)/2 }); });
@@ -88,4 +89,5 @@
 				}
 			});
 		};
+
 })(NETWORK.GRAPH || (NETWORK.GRAPH = {}));

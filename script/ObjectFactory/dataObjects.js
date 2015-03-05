@@ -215,6 +215,7 @@
 			
 			if((parseFloat(busObj.Gs) !== 0.0) || (parseFloat(busObj.Bs) !== 0.0)) {
 				//busType = "shunt";
+				console.log(busObj.Gs);
 				var sObj = {};
 				sObj["type"] = "shunt";
 				sObj["Pd"] = busObj.Pd;
@@ -232,7 +233,8 @@
 	};
 
 	/**
-	*Updated the branch data object with the attributes like - Source/Target Node Data, Name, Type, isMultiLine Status etc.
+	*	Updated the branch data object with the attributes like - Source/Target Node Data, Name, Type, isMultiLine Status etc.
+	*	Also adds the Node Edge Map to the NETWORK - This information once generated is independent of the Data Objects thus not attached in the Data Objects.
 	*/
 	NETWORK.ObjectFactory.prototype.updateEdgesData = function(networkConfigObj) {
 		var edges = {}, nodeIndexMap = {}, nodeObjectMap = {};
@@ -240,6 +242,8 @@
 		for(nodeIndexer = 0; nodeIndexer < networkConfigObj.busDataObj.dataObjList.length; nodeIndexer++) {
 			nodeIndexMap[networkConfigObj.busDataObj.dataObjList[nodeIndexer].bus_i] = nodeIndexer;
 		}
+	//Adding Node Branch Map to the NETWORK - This has been added to NETWORK because once created it is independent of the Data Object
+		NETWORK["nodeEdgeMap"] = nodeIndexMap;
 		
 		for (branchIndexer = 0 ; branchIndexer < networkConfigObj.branchDataObj.dataObjList.length; branchIndexer++) {
 			var edgeDataObj = networkConfigObj.branchDataObj.dataObjList[branchIndexer];			
@@ -306,7 +310,6 @@
 								 "isMultiLine" : isMultiLine,
 							};
 			edges[edgeName] = edge;
-			
 		}
 		
 		var edgeData = [];		
@@ -329,7 +332,7 @@
 			networkConfigObj.busDataObj.dataObjList[nodeIndexer]["status"] = status;
 		}
 	};
-
+	
 	/**
 	*	Updates the string value by removing the unwanted characters.
 	*	@param	strVal	The string value that needs to be updated.

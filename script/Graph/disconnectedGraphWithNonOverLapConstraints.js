@@ -13,12 +13,23 @@ function DisconnectedGraph(){
 	$("#dropInput").hide();
 	
 	//Calling the graph object.
-	drawDisconnectedGraph(NETWORK_OBJECTS,cola);
+	drawDisconnectedGraph();
+	
+	
+	var helper = new NETWORK.Help();
+	helper.drawGraph();
+	helper.updateToolTip();
+	
+	/*console.log(JSON.stringify(NETWORK_OBJECTS.branchDataObj.dataObjList));
+	console.log(JSON.stringify(NETWORK_OBJECTS.busDataObj.dataObjList));
+	console.log(JSON.stringify(NETWORK_OBJECTS.generatorCostDataObj.dataObjList));
+	console.log(JSON.stringify(NETWORK_OBJECTS.generatorDataObj.dataObjList));*/
+	
 	
 }	
 
-/** Draws the disconnected Graph. (If there are no disconnected nodes in the input - No disconnected nodes will be displayed in thegraph).*/
-function drawDisconnectedGraph(networkConfigObj,cola) {
+/** Draws the disconnected Graph. (If there are no disconnected nodes in the input - No disconnected nodes will be displayed in the graph).*/
+function drawDisconnectedGraph() {
 	var width = 1400, height = 1500;
 	var width = (window.innerWidth * .98) - (VIEWS.SharedFunctionality.R * 2);
 	var height = (window.innerHeight *.70) + (VIEWS.SharedFunctionality.R * 1);
@@ -47,8 +58,8 @@ function drawDisconnectedGraph(networkConfigObj,cola) {
 	svg.on("mousewheel.zoom", null);
 	svg.on("MozMousePixelScroll.zoom", null);
 		
-	var nodesData = networkConfigObj.busDataObj.dataObjList;
-	var edgesData = networkConfigObj.branchDataObj.dataObjList;	
+	var nodesData = NETWORK_OBJECTS.busDataObj.dataObjList;
+	var edgesData = NETWORK_OBJECTS.branchDataObj.dataObjList;	
 
 	//NOTE - THE LOGIC FOR GENERATION OF MULTI LINE NEEDS TO BE CORRECTED - THE CURRENT LOGIC GENERATES THE LINES BUT VIOLATES THE CLASS STRUCTURE. 
 	// THIS NEEDS TO BE FIXED.
@@ -103,7 +114,7 @@ function drawDisconnectedGraph(networkConfigObj,cola) {
 	var nodes = new NETWORK.GRAPH.Nodes(nodesData,vis,myCola);
 	
 	//This variable has been added to check if the graph file being loaded has fixed locations or not.
-	//If the graph bieng loaded has fixed locations then the zoomToFit is called again.
+	//If the graph being loaded has fixed locations then the zoomToFit is called again.
 	var fixedLocationGraphLoad = false;
 	if(typeof NETWORK_OBJECTS.busLocation !== "undefined") {
 		fixedLocationGraphLoad = true;
@@ -136,6 +147,8 @@ function drawDisconnectedGraph(networkConfigObj,cola) {
 				$("#saveLayout *").css({ background : 'white', color : 'grey' });
 		});
 	//Added the last parameters to solve the initial auto fit issue.
+	
+	
 	myCola.nodes(nodesData).links(edgesData).start(10,10,10);
 	//Interchange the x and y for the nodes in the graph based on the height and width of the graph.
 	// Here the Cola object is used instead of the SVG object.
@@ -155,7 +168,8 @@ function drawDisconnectedGraph(networkConfigObj,cola) {
 	$("#LoadSnippet").hide();
 
 	myCola.on("tick", function () {
-		if(VIEWS.SharedFunctionality.goToInitialStateTriggered) {
+		
+		if(VIEWS.SharedFunctionality.goToInitialStateTriggered && $("#parentSvgNode").is(":visible")) {
 			if(VIEWS.SharedFunctionality.autoLayout) {
 				d3.selectAll(".node").each(function(d){
 					var nodePositions = NETWORK_OBJECTS.busLocation.dataObjList;
@@ -204,7 +218,6 @@ function drawDisconnectedGraph(networkConfigObj,cola) {
 							}
 						}
 					});
-					//VIEWS.SharedFunctionality.zoomToFit(true);
 					VIEWS.SharedFunctionality.zoomToFit(true);
 					//Setting the variable as false the the zoomToFit is to be called only once.
 					fixedLocationGraphLoad = false;
@@ -212,7 +225,8 @@ function drawDisconnectedGraph(networkConfigObj,cola) {
 			}
 		}
 		nodes.tick();
-		standardEdges.tick();
+		//Solution view investigative code changes.
+		standardEdges.tick(VIEWS.SolutionView.viewMe);
 		transformerEdges.tick();
 		lineChargeEdges.tick();
 		for(var multiIndex = 0; multiIndex<MultiLineEdges.length;multiIndex++) {

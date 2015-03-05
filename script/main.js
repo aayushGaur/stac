@@ -1,5 +1,7 @@
 //NOTE - ALL THE FUNCTIONS OF THIS FILE ARE TO BE MOVED IN THE NETWORK NAMESPACE - 12/02/2015
-//ALSO MERGE THE DRAW GRAPH AND DRAW DEMO GRAPH METHODS INTO 1.
+
+//NOTE -- IMPORTANT FOR THE DEVELOPER -- UPDATE THE METHODS TO DRAW ALL THE GRAPHS IN ONE FUNCTION AND IT SHOULD BE IN THE NETWORK NAMESPACE.
+
 /**
 *	Performs the function of reading the dropped file and create the Data Objects after parsing of the file.
 *	Updated to call the drawDisconnectedGraph function - as no special user input is required once the input file has been dropped on the page.
@@ -12,8 +14,8 @@ function drawGraph(event) {
 	NETWORK_OBJECTS = null;
 	FILE = null;
 	var parserError = false;
-	//Capture the FILE from the target or the dataTransfer prop.
-	//var files = event.target.files || event.dataTransfer.files || event.originalEvent.dataTransfer.files;
+	/*Capture the FILE from the target or the dataTransfer prop.
+	var files = event.target.files || event.dataTransfer.files || event.originalEvent.dataTransfer.files;*/
 	var files;
 	var reader = new FileReader();
 	
@@ -24,19 +26,45 @@ function drawGraph(event) {
 		files = event.dataTransfer.files;
 	}	
 	
-	//Checks if the file can be loaded and then event.target.result is used to capture file data as 
-	//the reader.result can contain either the file or error.
+	/*Checks if the file can be loaded and then event.target.result is used to capture file data as 
+	the reader.result can contain either the file or error.*/
 	reader.onload = function(event) { 
 		FILE = event.target.result;
 		try {
 			var ObjectFactory = new NETWORK.ObjectFactory();
 			NETWORK_OBJECTS = ObjectFactory.getNetworkDataObjects();
+			var Solution = new NETWORK.Solution(NETWORK_OBJECTS);
 		}
 		catch(error) {
 				parserError = true;
 		}
-		//Logging NETWORK_OBJECTS for reference purpose.
+		/*Logging NETWORK_OBJECTS for reference purpose.*/
 		console.log(NETWORK_OBJECTS);
+		
+		
+		/*var e1, e2, e3, e4, e5;
+		e1 = JSON.stringify(NETWORK_OBJECTS.BaseMVA);
+		e2 = JSON.stringify(NETWORK_OBJECTS.branchDataObj);
+		e3 = JSON.stringify(NETWORK_OBJECTS.busDataObj);
+		e4 = JSON.stringify(NETWORK_OBJECTS.generatorCostDataObj);
+		e5 = JSON.stringify(NETWORK_OBJECTS.generatorDataObj);
+		console.log(e1);
+		console.log(e2);
+		console.log(e3);
+		console.log(e4);
+		console.log(e5);
+		var export = e1 + e2 + e3 + e4 + e5;
+		
+		var blob = new Blob([export], {type: 'text/json'});
+        e    = document.createEvent('MouseEvents');
+        a    = document.createElement('a');
+
+		a.download = "objects";
+		a.href = window.URL.createObjectURL(blob);
+		a.dataset.downloadurl =  ['text/json', a.download, a.href].join(':');
+		e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+		a.dispatchEvent(e);*/
+		
 		
 		if(!parserError) {
 			setTimeout(function() {
@@ -77,7 +105,7 @@ function drawGraph(event) {
 		}
 	}
 	
-	//Custom message in case of error while reading the file.
+	/*Custom message in case of error while reading the file.*/
 	reader.onerror = function(event) {
 		console.log("The reader failed to read the input file.");
 		console.log("Please check the file again....The simulation will not work if this step does not happen correctly.");
@@ -127,7 +155,6 @@ function drawDemoGraph(file) {
 		/*****Region Ends*****/
 	},1500);
 }
-
 
 //Performs stop propagation and prevents the browser from bubbling up the event.
 function stopPropagationAndPreventDefault(e) {

@@ -24,8 +24,16 @@ VIEWS.SharedFunctionality = (function(){
 		
 	var graphBounds = function(withCola) {
 		var x = Number.POSITIVE_INFINITY, X=Number.NEGATIVE_INFINITY, y=Number.POSITIVE_INFINITY, Y=Number.NEGATIVE_INFINITY;	
+		//Check the visibility of the graph and then Select the graph for which the layout is to be exported.
+		var selCola;	
+		if($("#parentSvgNode").is(":visible")) {
+			selCola = myCola;
+		}
+		else {
+			selCola = myColaHelp;
+		}
 		if(withCola) {
-			myCola.nodes().forEach(function (v) {
+			selCola.nodes().forEach(function (v) {
 				x = Math.min(x, v.x - VIEWS.SharedFunctionality.R * 2);
 				X = Math.max(X, v.x);
 				y = Math.min(y, v.y  - VIEWS.SharedFunctionality.R * 4);
@@ -45,9 +53,19 @@ VIEWS.SharedFunctionality = (function(){
 	
 	var redraw = function(transition) {
 		if (VIEWS.SharedFunctionality.nodeMouseDown) return;
-		var vis = d3.select("g");
+		var vis,zoomer;
+		//Selecting the g node for autofit based on the visibility of the graph.
+		if($("#parentSvgNode").is(":visible")) {
+			vis = d3.select("#parentSvgNode").select("g");
+			zoomer = zoom;
+		}
+		else {
+			vis = d3.select("#helpSvgNode").select("g");
+			zoomer = zoomHelp;
+		}
+		
 		(transition ? vis.transition() : vis)
-			.attr("transform", "translate(" + zoom.translate() + ") scale(" + zoom.scale() + ")");
+			.attr("transform", "translate(" + zoomer.translate() + ") scale(" + zoomer.scale() + ")");
 	};
 	
 	//The Methods mentioned in the return are exposed as public methods for the Class (Implemented as pure Static).
@@ -57,6 +75,7 @@ VIEWS.SharedFunctionality = (function(){
 		hasNodeLocationData:false,
 		goToInitialStateTriggered: false,
 		nodeMouseDown:false,
+		bShowHelp:false,
 		
 		createMouseEvent :function(type,x,y,bShiftKey) {
 			return createCustomMouseEvent(type,x,y,bShiftKey);
@@ -67,26 +86,31 @@ VIEWS.SharedFunctionality = (function(){
 		},
 		
 		switchTabs : function(event) {
-			var activeTabIndex = -1;
-			var tabNames = ["dataView","dataValidationView"];
-			
-			for(var i = 0; i < tabNames.length;i++) {
-				if(event.target.id == tabNames[i]) {
-					activeTabIndex = i;
-				} else {
-					$("#"+tabNames[i]).removeClass("activeButton");
+			if($("#parentSvgNode").is(":visible")) {
+				var activeTabIndex = -1;
+				var tabNames = ["dataView","dataValidationView"];
+				
+				for(var i = 0; i < tabNames.length;i++) {
+					if(event.target.id == tabNames[i]) {
+						activeTabIndex = i;
+					} else {
+						$("#"+tabNames[i]).removeClass("activeButton");
+					}
+				}
+				$("#"+tabNames[activeTabIndex]).addClass("activeButton");
+				
+				if(activeTabIndex === 0) {
+					VIEWS.DataView.returnToView();
+				}
+				else if(activeTabIndex === 1) {
+					VIEWS.ValidationView.performValidation();
+				}	
+				else {
+					//handling of switching tab for the Solution View.
 				}
 			}
-			$("#"+tabNames[activeTabIndex]).addClass("activeButton");
-			
-			if(activeTabIndex === 0) {
-				VIEWS.DataView.returnToView();
-			}
-			else if(activeTabIndex === 1) {
-				VIEWS.ValidationView.performValidation();
-			}	
 			else {
-				//handling of switching tab for the Solution View.
+				alert("Switching between views is not allowed for help Network.");
 			}
 		},
 		
@@ -98,7 +122,14 @@ VIEWS.SharedFunctionality = (function(){
 			var s = Math.min(cw / w, ch / h);
 			var tx = (-b.x * s + (cw / s - w) * s / 2);
 			var ty = (-b.y * s + (ch / s - h) * s / 2);
-			zoom.translate([tx, ty]).scale(s);
+			var selZoom;
+			if($("#parentSvgNode").is(":visible")) {
+				selZoom = zoom;
+			}
+			else {
+				selZoom = zoomHelp;
+			}
+			selZoom.translate([tx, ty]).scale(s);
 			redraw(true);
 		},
 		
@@ -127,9 +158,17 @@ VIEWS.SharedFunctionality = (function(){
 		showLayout : function() {	
 			var positionObj = {};
 			var nodePositions = []
-			
-			//d3.selectAll(".node").each(function(d){
-			myCola.nodes().forEach(function(d){
+			var exportPosObj, posStringObj="";
+			//Check the visibility of the graph and then Select the graph for which the layout is to be exported.
+			if($("#parentSvgNode").is(":visible")) {
+				exportPosObj = myCola;
+			}
+			else {
+				exportPosObj = myColaHelp;
+				posStringObj += "%% This is the bus Location for the help graph. \n";
+			}
+
+			exportPosObj.nodes().forEach(function(d){
 				if (d) { 
 					var pos = {
 									"bus_i": d.bus_i,
@@ -140,11 +179,11 @@ VIEWS.SharedFunctionality = (function(){
 					positionObj["nodePositions"] = nodePositions;
 				}
 			});
+			
 			//Creating the string object simultaneously.
-			var posStringObj = "%% bus location\n";
+			posStringObj += "%% bus location\n";
 			posStringObj = posStringObj + "%" + "\t" + "bus_i" + "\t" + "x" + "\t" + "y" + "\n";
 			posStringObj = posStringObj + "mpc.buslocation = [\n";
-			
 			for(var i = 0; i < positionObj.nodePositions.length; i++) {
 				var pos = positionObj.nodePositions[i];
 				var txt = "\t";
@@ -168,46 +207,34 @@ VIEWS.SharedFunctionality = (function(){
 		},
 		
 		toggleFixedPosition : function() {
-			if (VIEWS.SharedFunctionality.hasNodeLocationData) {
-				VIEWS.SharedFunctionality.goToInitialStateTriggered = true;
-				$("#fixedPosition").removeClass('activeButton');
-				triggerCustomDrag();
-				var event = document.createEvent("SVGEvents");
-				event.initEvent("dragged",true,true);
-				($(".node")[0]).dispatchEvent(event);
-			}
-			else {
-				alert("The input network file had no Bus Location Data.");
-				/*Investigative Code - Update Initial Position Region begins
-				var bRet = confirm("The input network file had no Bus Location Data.\nDo you want to save the current State as the Initial State for the Network.\nPlease note you will have to download the Layout and save it.");
-				if(bRet) {
-					var positionObj = {};
-					var nodePositions = []
-					
-					//d3.selectAll(".node").each(function(d){
-					myCola.nodes().forEach(function(d){
-						if (d) { 
-							var pos = {
-											"bus_i": d.bus_i,
-											"x": d.x,
-											"y": d.y
-											};
-							nodePositions.push(pos);
-							positionObj["dataObjList"] = nodePositions;
-						}
-					});
-					VIEWS.SharedFunctionality.hasNodeLocationData = true;
-					NETWORK_OBJECTS["busLocation"] = positionObj;
+			if($("#parentSvgNode").is(":visible")) {
+				if (VIEWS.SharedFunctionality.hasNodeLocationData) {
+					VIEWS.SharedFunctionality.goToInitialStateTriggered = true;
+					$("#fixedPosition").removeClass('activeButton');
+					triggerCustomDrag();
+					var event = document.createEvent("SVGEvents");
+					event.initEvent("dragged",true,true);
+					($(".node")[0]).dispatchEvent(event);
 				}
 				else {
-					//log that the user did not want to save the data.
+					alert("The input network file had no Bus Location Data.");
 				}
-				Investigative Region Ends*/
+			}
+			else {
+				alert("The help network does not have Bus Location Data.");
 			}
 		},
 		
 		buttonZoom : function(bShiftKey) {
-			var svg = d3.select(".background");
+			var svg;
+			//Select the background if it is visible; else select the help graph.
+			if($("#parentSvgNode").is(":visible")) {
+				svg = d3.select(".background");
+			}
+			else {
+				svg = d3.select(".backgroundHelp");
+			}
+			
 			var CenterX = svg.node().getBBox().width/2;
 			var CenterY = svg.node().getBBox().height /2;
 			var evt = createCustomMouseEvent('dblclick',CenterX,CenterY,bShiftKey);
@@ -280,6 +307,21 @@ VIEWS.SharedFunctionality = (function(){
 	
 		refreshCurrentPage : function() {
 			window.open(document.URL,"_self");
+		},
+		
+		showHelp : function() {
+			if(!VIEWS.SharedFunctionality.bShowHelp) {
+				VIEWS.SharedFunctionality.bShowHelp = true;
+				$("#helpSvgNode").show();
+				$("#parentSvgNode").hide();
+				$("#showHelp").addClass("activeButton");
+			}
+			else {
+				VIEWS.SharedFunctionality.bShowHelp = false;
+				$("#helpSvgNode").hide();
+				$("#parentSvgNode").show();
+				$("#showHelp").removeClass("activeButton");
+			}
 		},
 	};
 })();

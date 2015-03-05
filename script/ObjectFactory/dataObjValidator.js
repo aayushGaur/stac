@@ -46,6 +46,12 @@
 					LOGGER.addWarningMessage("Status of Bus "+ crtNode.bus_i + " is 0 where as status for Generator " + data.id+ " is 1." ,data.DOMID,"topDeco");
 				}
 				
+				if(parseFloat(data.Vg) !== parseFloat(crtNode.Vm)) {
+					var VgWarning = {"key":"Vg", "data":"Value Vg on the generator is not equal to value of Vm on the bus.","custom":"true","type":"warning"};
+					warning = true;
+					validationWarning.push(VgWarning);
+					LOGGER.addWarningMessage("Value of Vg for generator "+ data.id + "is not equal to value of Vm for bus"+ crtNode.bus_i +"." ,data.DOMID,"topDeco");
+				}
 				
 				topDeco["validationWarning"] = validationWarning;
 				topDeco["warning"] = warning;
@@ -65,6 +71,7 @@
 					p LB, below 0 - ???
 					Sync cond. has non-zero cost
 					status is 1, while bus status is 0
+					Vg of the generator should be equal to the Vm of the node.
 				***For Errors***
 						infeasible p, g bounds i.e. error if Qmin > Qmax Or Pmin > Pmax
 				*/
@@ -167,7 +174,6 @@
 				}
 			}
 			
-			//NEED TO DISCUSS THE UB RELATED VALIDATION.
 			if(parseFloat(data.edgeData.rateA) > parseFloat(data.edgeData.UB)) { 
 				warning = true;
 				validationWarning.push({"key":"charge", "data":"Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")","custom":"true","type":"warning"});
@@ -182,6 +188,14 @@
 				}
 				else {
 					LOGGER.addErrorMessage("Status of Branch - "+ data.index + " (" +(data.edgeId) + ")  is 1 where as status for Bus " + data.target.bus_i + " is 0.",data.edgeData.DOMID,"edge");	
+				}
+			}
+			
+			if(data.edgeType==="Transformer") {
+				if(parseFloat(data.edgeData.b) > 0) {
+					warning = true;
+					validationWarning.push({"key":"Charge greater than zero.", "data":"Charge value greater than 0 for transformer.","custom":"true","type":"warning"});
+					LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ") is a transformer but the charge is greater than zero.",data.edgeData.DOMID,"edge");	
 				}
 			}
 				
@@ -200,6 +214,13 @@
 				ValidationError.push({"key":"Error", "data":"Infeasible phase angle bounds.","custom":"true","type":"error"});
 				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Infeasible Voltage Bounds." ,data.edgeData.DOMID,"edge");
 			}
+			
+			if((parseFloat(data.source.baseKV) !== parseFloat(data.target.baseKV)) && (data.edgeType!=="Transformer")) {
+				error = true;
+				ValidationError.push({"key":"Error", "data":"Inconsistent KVbase values.","custom":"true","type":"error"});
+				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Inconsistent KVbase values.." ,data.edgeData.DOMID,"edge");
+			}
+			
 			this.edgeDataObjs.dataObjList[index]["validationError"] = ValidationError;
 			this.edgeDataObjs.dataObjList[index]["error"] = error;
 			
@@ -214,8 +235,9 @@
 			status is 1, while bus is 0 - If the bus type is 4 then it is said to be 0.
 			
 			***For Error***
-			Thermal limit is negative - rateA <0
-			Infeasible phase angle bounds - error if angmin > angmax
+			Thermal limit is negative - rateA <0.
+			Infeasible phase angle bounds - error if angmin > angmax.
+			Inconsistent KVbase values - baseKV values for the source and target are not equal.
 		*/
 		}
 	};

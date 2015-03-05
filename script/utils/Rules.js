@@ -22,17 +22,30 @@ NETWORK.RULES = {
 			}
 		}
 	},
-//NOTE  - THE FIRST RULE IN ALL THE TOOL-TIP DATA MUST BE THE TOOLTIP TITLE - AS THE TITLE IS THE FIRST ELEMENT IN A STRUCTURE IT MUST BE KEPT IN THE FIRST POSITION IN THE DS ALSO.
-		
+
+/*Tool-tip data - Features that the tool-tip supports i.e. by only giving the JSON input using these tricks will add different functionalities in the tool-tip data.
+ Mandatory parameters :
+	1. key - The name for the tool-tip (any entry in the rules for which the value of the key is 'ToolTipTitle' is displayed in the title.
+	2. data - The relative JSON path for the tool-tip data (if the property value at a certain data path is null or undefined then that property is not displayed in the tool-tip for the element (at that instance).
+ Optional Parameter :
+	1. units - The units associated with the data (if value is set to -NA- then no unit is displayed).
+	2. type - The type of the tool-tip element i.e. whether it is error, warning or normal tool-tip data.
+	3. classed - Any specific CSS class name that is to be attached with the value displayed in the td of the table.
+	4. nature - Currently supported values are Static/Dynamic. Static values are displayed in the first table and the dynamic values are displayed in second table.
+ Intelligent keys in Tool-tips: Keys implemented for the solution data in the tool-tip have the following functionality:
+	1. phVals - This represents an array of paths from which the data is to be picked up to fill the place holders in kt.
+	2. kt - This is the key text which is used to make the dynamic key for the tool-tip data. The place holders in the kt are filled in the respective order of their path declaration in the phVals.
+*/
+
 	nodeToolTip : [
 		{"key":"ToolTipTitle", "data":"bus_i","units":"-NA-","preTitleValText":"Bus ","postTitleValText":""},
-		{"key":"Id", "data":"bus_i","units":"-NA-"},
-		{"key":"V Max", "data":"Vmax","units":"Volts p.u."},
-		{"key":"V Min", "data":"Vmin","units":"Volts p.u."},
-		{"key":"Voltage", "data":"Vm","units":"Volts p.u."},
-		{"key":"Phase Angle", "data":"Va","units":"Degree"},
-		{"key":"Base KV", "data":"baseKV","units":"KV"},
-		{"key":"Generator Id(s) List", "data":"GenIdList","units":"-NA-"},
+		{"key":"Id", "data":"bus_i","units":"-NA-","nature":"static"},
+		{"key":"V Max", "data":"Vmax","units":"Volts p.u.","nature":"static"},
+		{"key":"V Min", "data":"Vmin","units":"Volts p.u.","nature":"static"},
+		{"key":"Voltage", "data":"Vm","units":"Volts p.u.","nature":"dynamic"},
+		{"key":"Phase Angle", "data":"Va","units":"Degree","nature":"dynamic"},
+		{"key":"Base KV", "data":"baseKV","units":"KV","nature":"static"},
+		{"key":"Generator Id(s) List", "data":"GenIdList","units":"-NA-","nature":"dynamic"},
 	],
 	
 	bottomDecoToolTipLoad : [
@@ -74,21 +87,83 @@ NETWORK.RULES = {
 		{"key":"Id", "data":"index","units":"-NA-"},
 		{"key":"r", "data":"edgeData.r","units":"Resistance p.u."},
 		{"key":"x", "data":"edgeData.x","units":"Reactance p.u."},
-		/*{"key":"g", "custom":" d.linkData.r/(d.linkData.r*d.linkData.r + d.linkData.x*d.linkData.x)	"},
-		{"key":"b", "data":"-x/(r^2 + x^2)"},*/
 		{"key":"charge", "data":"edgeData.b","units":"Susceptance p.u."},
 		{"key":"Rate A", "data":"edgeData.rateA","units":"MVA"},
 		{"key":"Rate B", "data":"edgeData.rateB","units":"MVA"},
 		{"key":"Rate C", "data":"edgeData.rateC","units":"MVA"},
 		{"key":"Min angle difference", "data":"edgeData.angmin","units":"Degrees"},
 		{"key":"Max angle difference", "data":"edgeData.angmax","units":"Degrees"},
+		
+		/*For solution data*/
+		{"key":
+				{
+					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
+					"kt":"Active power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+				}, 
+			"data":"solutionData.p-s-t","units":"MVAr","nature":"dynamic"},
+		{"key":
+				{
+					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
+					"kt":"Reactive power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+				}, 
+			"data":"solutionData.q-s-t","units":"MVAr","nature":"dynamic"},
+		{"key":
+				{
+					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
+					"kt":"Active power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+				},
+			"data":"solutionData.p-t-s","units":"MVAr","nature":"dynamic"},
+		{"key":
+				{
+					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
+					"kt":"Reactive power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+				},
+			"data":"solutionData.q-t-s","units":"MVAr","nature":"dynamic"},
+		{"key":
+				{
+					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
+					"kt":"S power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+				},
+		"data":"solutionData.s-s-t","units":"MVAr","nature":"dynamic"},
+		{"key":
+				{
+					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
+					"kt":"S power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+				},
+		"data":"solutionData.s-t-s","units":"MVAr","nature":"dynamic"},
 	],
+	
 	transformerEdgeToolTipExtra : [
 		{"key":"Transformer Tap", "data":"edgeData.ratio","units":"Volts p.u."},
 		{"key":"Phase Shift", "data":"edgeData.angle","units":"Degrees"},
 	],
+	
+	/***** Region : ToolTip Rules for the Edges *****/
+	edgeHelpToolTip : [
+		{"key":["edgeType"], "data":"This is a %1% Branch."},
+		{"key":["edgeId"], "data":"It is %1%."},
+	],
+	
+	busHelpToolTip : [
+		{"key":["bus_i"], "data":"This is %1%."},
+	],
+	
+	topDecoHelpToolTip : [
+		{"key":["type"], "data":"This is a %1%."},
+		{"key":["text"], "data":"It is represented using '%1%'."},
+	],
+	
+	bottomDecoHelpToolTip : [
+		{"key":["type"], "data":"This is a '%1%' on the bus."},
+	],
+	
+	/*****Region Ends*****/
 };
 
+
+
+
+/*****Region Begins - Investigative piece of code....not functional*****/
 NETWORK.ERRORS = {
 };
 
@@ -122,3 +197,4 @@ NETWORK.LOGGING = {
 		{"id":"2","text":"The Value of '%attrName%', for the element '%eleId%' is 'greater than zero'."},
 	],
 };
+/*****Region Ends.*****/
