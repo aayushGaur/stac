@@ -43,9 +43,9 @@ NETWORK.RULES = {
 		{"key":"V Max", "data":"Vmax","units":"Volts p.u.","nature":"static"},
 		{"key":"V Min", "data":"Vmin","units":"Volts p.u.","nature":"static"},
 		{"key":"Voltage", "data":"Vm","units":"Volts p.u.","nature":"dynamic"},
-		{"key":"Phase Angle", "data":"Va","units":"Degree","nature":"dynamic"},
+		{"key":"Phase Angle", "data":"Va","units":"Degrees","nature":"dynamic"},
 		{"key":"Base KV", "data":"baseKV","units":"KV","nature":"static"},
-		{"key":"Generator Id(s) List", "data":"GenIdList","units":"-NA-","nature":"dynamic"},
+		{"key":"Generator Id(s) List", "data":"GenIdList","units":"-NA-","nature":"static"},
 	],
 	
 	bottomDecoToolTipLoad : [
@@ -71,12 +71,12 @@ NETWORK.RULES = {
 	topDecoToolTip : [
 		{"key":"ToolTipTitle", "data":"id","units":"-NA-","preTitleValText":"Generator ","postTitleValText":""},
 		{"key":"Bus Id", "data":"bus","units":"-NA-"},
-		{"key":"P", "data":"Pg","units":"MW"},
-		{"key":"P Min Bounds", "data":"Pmin","units":"MW"},
-		{"key":"P Max Bounds", "data":"Pmax","units":"MW"},
-		{"key":"Q", "data":"Qg","units":"MVAr"},
-		{"key":"Q Min Bounds", "data":"Qmin","units":"MVAr"},
-		{"key":"Q Max Bounds", "data":"Qmax","units":"MVAr"},
+		{"key":"P", "data":"Pg","units":"MW","nature":"dynamic"},
+		{"key":"P Min Bounds", "data":"Pmin","units":"MW","nature":"dynamic"},
+		{"key":"P Max Bounds", "data":"Pmax","units":"MW","nature":"dynamic"},
+		{"key":"Q", "data":"Qg","units":"MVAr","nature":"dynamic"},
+		{"key":"Q Min Bounds", "data":"Qmin","units":"MVAr","nature":"dynamic"},
+		{"key":"Q Max Bounds", "data":"Qmax","units":"MVAr","nature":"dynamic"},
 		{"key":"Cost 1", "data":"costData.cost1","units":"$/MW hr squared"},
 		{"key":"Cost 2", "data":"costData.cost2","units":"$/MW hr"},
 		{"key":"Cost 3", "data":"costData.cost3","units":"$/MW hr"},
@@ -95,12 +95,13 @@ NETWORK.RULES = {
 		{"key":"Max angle difference", "data":"edgeData.angmax","units":"Degrees"},
 		
 		/*For solution data*/
+		/**Active power forward/ active power reverse**/
 		{"key":
 				{
 					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
 					"kt":"Active power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
 				}, 
-			"data":"solutionData.p-s-t","units":"MVAr","nature":"dynamic"},
+			"data":"solutionData.p-s-t","units":"MW","nature":"dynamic"},
 		{"key":
 				{
 					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
@@ -112,7 +113,7 @@ NETWORK.RULES = {
 					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
 					"kt":"Active power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
 				},
-			"data":"solutionData.p-t-s","units":"MVAr","nature":"dynamic"},
+			"data":"solutionData.p-t-s","units":"MW","nature":"dynamic"},
 		{"key":
 				{
 					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
@@ -122,15 +123,15 @@ NETWORK.RULES = {
 		{"key":
 				{
 					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"S power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+					"kt":"Apparent power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
 				},
-		"data":"solutionData.s-s-t","units":"MVAr","nature":"dynamic"},
+		"data":"solutionData.s-s-t","units":"MVA","nature":"dynamic"},
 		{"key":
 				{
 					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"S power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
+					"kt":"Apparent power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
 				},
-		"data":"solutionData.s-t-s","units":"MVAr","nature":"dynamic"},
+		"data":"solutionData.s-t-s","units":"MVA","nature":"dynamic"},
 	],
 	
 	transformerEdgeToolTipExtra : [
@@ -140,21 +141,27 @@ NETWORK.RULES = {
 	
 	/***** Region : ToolTip Rules for the Edges *****/
 	edgeHelpToolTip : [
-		{"key":["edgeType"], "data":"This is a %1% Branch."},
-		{"key":["edgeId"], "data":"It is %1%."},
+		{"key":["source.helpDesc", "target.helpDesc"], "data":"This is a power line connecting bus '%1%' and bus '%2%'."},
+	],
+
+	edgeLineChargeHelpToolTip : [
+		{"key":["source.helpDesc", "target.helpDesc"], "data":"This is a power line with line charging connecting bus '%1%' and bus '%2%'."},
+	],
+	
+	edgeTransformerHelpToolTip : [
+		{"key":["source.helpDesc", "target.helpDesc"], "data":"This is a transformer connecting bus '%1%' and bus '%2%'. "},
 	],
 	
 	busHelpToolTip : [
-		{"key":["bus_i"], "data":"This is %1%."},
+		{"key":["helpDesc"], "data":"This is bus with ID '%1%'."},
 	],
 	
 	topDecoHelpToolTip : [
-		{"key":["type"], "data":"This is a %1%."},
-		{"key":["text"], "data":"It is represented using '%1%'."},
+		{"key":["helpDesc"], "data":"This is a %1%."},
 	],
 	
 	bottomDecoHelpToolTip : [
-		{"key":["type"], "data":"This is a '%1%' on the bus."},
+		{"key":["bottomDecorators.0.helpDesc","helpDesc"], "data":"This is a '%1%' on the bus '%2%'."},
 	],
 	
 	/*****Region Ends*****/

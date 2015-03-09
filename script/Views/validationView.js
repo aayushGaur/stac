@@ -21,13 +21,13 @@ VIEWS.ValidationView  = (function(){
 			var crtDecoID = "LineChargeGradientError";
 			setInterval(function() {
 				d3.selectAll(".errorWarning").classed(crtClass, false);
-				crtClass = crtClass === 'error' ? 'warning' : 'error';
+				crtClass = crtClass === 'error' ? 'error' : 'error';
 				d3.selectAll(".errorWarning").classed(crtClass, true);
 			//Added to alternate the color of the Line Charge Decorator.
 				d3.selectAll(".LineChargeDecoErrorWarning").style("fill", "url(#"+crtDecoID +")");
-				crtDecoID = crtDecoID === 'LineChargeGradientError' ? 'LineChargeGradientWarning' : 'LineChargeGradientError';
+				crtDecoID = crtDecoID === 'LineChargeGradientError' ? 'LineChargeGradientError' : 'LineChargeGradientError';
 				d3.selectAll(".LineChargeDecoErrorWarning").style("fill", "url(#"+crtDecoID +")");
-			}, 1000);
+			}, 5);
 				
 			//Update the UI of the edges based on the errors and warnings.
 			d3.selectAll(".edge").each(function(d){ 

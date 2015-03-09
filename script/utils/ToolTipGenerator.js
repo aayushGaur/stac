@@ -16,7 +16,7 @@ NETWORK.TOOLTIP = (function(){
 		
 		var warningHtml="", errorHtml="", toolTipHtmlStatic, toolTipHtmlDynamic, bDynamicPresent = false;
 		toolTipHtmlStatic = "<table border='1' style='margin:0 auto; font-size:.74em;border-spacing:0;width:100%;'><tr><th>Property</th><th>Value</th><th>Units</th></tr><tr><th colspan='3'>Static</th></tr>";
-		toolTipHtmlDynamic = "<tr><th colspan='3'>Dynamic</th></tr>";
+		toolTipHtmlDynamic = "<tr><th colspan='3'>Power Flow</th></tr>";
 		for(var i = 0; i < rules.length; i++) {
 			var key, units, type, classVal ,propVal = null, nature;
 			key = rules[i].key;
@@ -117,22 +117,25 @@ NETWORK.TOOLTIP = (function(){
 	var getHelpToolTipHtml = function(d,tooltipRule) {
 		var toolTipHelp = "<div>";
 		for(var index = 0; index < tooltipRule.length; index++) {
+			var infoText = "<p style='margin:0'>";
+			infoText += tooltipRule[index].data;
 			for(var i = 0; i < tooltipRule[index].key.length;i++) {
-				var infoText = "<p style='margin:0'>" + (index + 1) + ". ";
 				var path = tooltipRule[index].key[i].split(".");
 				var propVal = null;
 				
 				for(var j = 0; j < path.length; j++) {
-					if (propVal === null) { propVal = d[path[j]]; }
-					else { propVal = propVal[path[j]];}
+					if (propVal === null) { 
+						propVal = d[path[j]];
+					}
+					else {
+						propVal = propVal[path[j]];
+					}
 				}
-				
-				infoText += tooltipRule[index].data.replace(("%"+ (i + 1) + "%"),propVal);
-				infoText += "</p>";
-				toolTipHelp += infoText;
+				infoText = infoText.replace(("%"+ (i + 1) + "%"),propVal);
 			}
+			infoText += "</p>";
+			toolTipHelp += infoText;
 		}
-		console.log(d);
 		toolTipHelp += "</div>";
 		return toolTipHelp;
 	};

@@ -215,7 +215,6 @@
 			
 			if((parseFloat(busObj.Gs) !== 0.0) || (parseFloat(busObj.Bs) !== 0.0)) {
 				//busType = "shunt";
-				console.log(busObj.Gs);
 				var sObj = {};
 				sObj["type"] = "shunt";
 				sObj["Pd"] = busObj.Pd;

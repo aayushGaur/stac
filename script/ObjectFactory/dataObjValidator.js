@@ -160,19 +160,22 @@
 				validationWarning.push({"key":"Status", "data":"RateA zero for Branch.","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Value of 'RateA' is zero for Branch - "+ data.index + " (" +(data.edgeId) + ")",data.edgeData.DOMID,"edge");
 			}
+			
+			if(parseFloat(data.edgeData.b) !== 0) {
+				if(Math.abs(Math.log10(data.edgeData.x) - Math.log10(data.edgeData.b)) >= 1) {
+					warning = true;
+					warningList.push("charge"); 
+					validationWarning.push({"key":"charge", "data":"Charge is very different from x.","custom":"true","type":"warning"});
+					LOGGER.addWarningMessage("On Branch - "+ data.index + " (" +(data.edgeId) + ")" + "charge is very different from x.",data.edgeData.DOMID,"edge");	
+				}
+			}
+			
 			for(var i = 0; i < validationWarning.length;i++) {
 				if($.inArray(validationWarning[i].key, warningList) !== -1) {
 					validationWarning[i]["classed"] = "warning";
 				}
 			}
 			
-			if(parseFloat(data.edgeData.b) !== 0) {
-				if(Math.abs(Math.log10(data.edgeData.x) - Math.log10(data.edgeData.b)) >= 1) {
-					warning = true;
-					validationWarning.push({"key":"charge", "data":"Charge is very different from x.","custom":"true","type":"warning"});
-					LOGGER.addWarningMessage("On Branch - "+ data.index + " (" +(data.edgeId) + ")" + "charge is very different from x.",data.edgeData.DOMID,"edge");	
-				}
-			}
 			
 			if(parseFloat(data.edgeData.rateA) > parseFloat(data.edgeData.UB)) { 
 				warning = true;
@@ -194,7 +197,7 @@
 			if(data.edgeType==="Transformer") {
 				if(parseFloat(data.edgeData.b) > 0) {
 					warning = true;
-					validationWarning.push({"key":"Charge greater than zero.", "data":"Charge value greater than 0 for transformer.","custom":"true","type":"warning"});
+					validationWarning.push({"key":"Transformer with a non zero charge value.", "data":"Charge value greater than 0 for transformer.","custom":"true","type":"warning"});
 					LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ") is a transformer but the charge is greater than zero.",data.edgeData.DOMID,"edge");	
 				}
 			}
@@ -218,7 +221,7 @@
 			if((parseFloat(data.source.baseKV) !== parseFloat(data.target.baseKV)) && (data.edgeType!=="Transformer")) {
 				error = true;
 				ValidationError.push({"key":"Error", "data":"Inconsistent KVbase values.","custom":"true","type":"error"});
-				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Inconsistent KVbase values.." ,data.edgeData.DOMID,"edge");
+				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Inconsistent KVbase values." ,data.edgeData.DOMID,"edge");
 			}
 			
 			this.edgeDataObjs.dataObjList[index]["validationError"] = ValidationError;
