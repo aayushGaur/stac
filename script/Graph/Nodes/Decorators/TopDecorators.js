@@ -45,10 +45,10 @@
 								var bError = topDeco.error;
 						
 								if(bError && bWarning) {
-									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,warningData.concat(errorData));
+									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,errorData);
 								}
 								else if(bError) {
-									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,NETWORK.RULES.topDecoToolTip.concat(errorData));
+									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,errorData);
 								}
 								else if(bWarning) {
 									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,warningData);
@@ -86,10 +86,10 @@
 								var bError = topDeco.error;
 						
 								if(bError && bWarning) {
-									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,warningData.concat(errorData));
+									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,errorData);
 								}
 								else if(bError) {
-									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,NETWORK.RULES.topDecoToolTip.concat(errorData));
+									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,errorData);
 								}
 								else if(bWarning) {
 									NETWORK.TOOLTIP.showToolTip(d.topDecorators[index].topDecoData,d3.event,warningData);

@@ -16,10 +16,10 @@
 										var bError = d.error;
 										var TooltipData;
 										if(bError && bWarning) {
-											TooltipData = warningData.concat(errorData);
+											TooltipData = errorData;
 										}
 										else if(bError) {
-											TooltipData = NETWORK.RULES.edgeToolTip.concat(errorData);
+											TooltipData = errorData;
 										}
 										else if(bWarning) {
 											TooltipData = warningData;
@@ -43,10 +43,10 @@
 									var bError = d.error;
 									var TooltipData;
 									if(bError && bWarning) {
-										TooltipData = warningData.concat(errorData);
+										TooltipData = errorData;
 									}
 									else if(bError) {
-										TooltipData = NETWORK.RULES.edgeToolTip.concat(errorData);
+										TooltipData = errorData;
 									}
 									else if(bWarning) {
 										TooltipData = warningData;

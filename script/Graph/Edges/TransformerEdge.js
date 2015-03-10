@@ -8,10 +8,10 @@
 			var bError = d.error;
 			var TooltipData;
 			if(bError && bWarning) {
-				TooltipData = warningData.concat(NETWORK.RULES.transformerEdgeToolTipExtra).concat(errorData);
+				TooltipData = NETWORK.RULES.transformerEdgeToolTipExtra.concat(errorData);
 			}
 			else if(bError) {
-				TooltipData = NETWORK.RULES.edgeToolTip.concat(NETWORK.RULES.transformerEdgeToolTipExtra).concat(errorData);
+				TooltipData = NETWORK.RULES.transformerEdgeToolTipExtra.concat(errorData);
 			}
 			else if(bWarning) {
 				TooltipData = warningData.concat(NETWORK.RULES.transformerEdgeToolTipExtra);
@@ -41,10 +41,10 @@
 						var bError = d.error;
 						var TooltipData;
 						if(bError && bWarning) {
-							TooltipData = warningData.concat(NETWORK.RULES.transformerEdgeToolTipExtra).concat(errorData);
+							TooltipData = NETWORK.RULES.transformerEdgeToolTipExtra.concat(errorData);
 						}
 						else if(bError) {
-							TooltipData = NETWORK.RULES.edgeToolTip.concat(NETWORK.RULES.transformerEdgeToolTipExtra).concat(errorData);
+							TooltipData = NETWORK.RULES.transformerEdgeToolTipExtra.concat(errorData);
 						}
 						else if(bWarning) {
 							TooltipData = warningData.concat(NETWORK.RULES.transformerEdgeToolTipExtra);
@@ -66,10 +66,10 @@
 						var TooltipData;
 						
 						if(bError && bWarning) {
-							TooltipData = warningData.concat(NETWORK.RULES.transformerEdgeToolTipExtra).concat(errorData);
+							TooltipData = NETWORK.RULES.transformerEdgeToolTipExtra.concat(errorData);
 						}
 						else if(bError) {
-							TooltipData = NETWORK.RULES.edgeToolTip.concat(NETWORK.RULES.transformerEdgeToolTipExtra).concat(errorData);
+							TooltipData = NETWORK.RULES.transformerEdgeToolTipExtra.concat(errorData);
 						}
 						else if(bWarning) {
 							TooltipData = warningData.concat(NETWORK.RULES.transformerEdgeToolTipExtra);

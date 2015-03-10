@@ -34,7 +34,7 @@
 			.text(function (d) { return d.bus_i; })
 			.on("mouseover", function (d) { 
 														if(d.error) {
-																NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip.concat(d.validationError));
+																NETWORK.TOOLTIP.showToolTip(d,d3.event,d.validationError);
 															}
 															else {
 																NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip);
@@ -51,7 +51,7 @@
 														.attr("r", VIEWS.SharedFunctionality.R)
 														.on("mouseover", function (d) { 
 															if(d.error) {
-																NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip.concat(d.validationError));
+																NETWORK.TOOLTIP.showToolTip(d,d3.event,d.validationError);
 															}
 															else {
 																NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip);

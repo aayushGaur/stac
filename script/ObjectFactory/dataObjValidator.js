@@ -15,6 +15,7 @@
 				var data = topDeco.topDecoData;
 				var warningList =[];
 				//Deep Copy of the Array - JQuery method.
+				//This array is used to record both the errors and the warnings for the bus.
 				var validationWarning = jQuery.extend(true, [], NETWORK.RULES.topDecoToolTip);
 				
 				if(topDeco.type === "generator") {
@@ -22,11 +23,15 @@
 						var cost = {"key":"Cost", "data":"Cost for generator is Negative","custom":"true","type":"warning"};
 						warning = true;
 						validationWarning.push(cost);
+						warningList.push("Cost 1");
+						warningList.push("Cost 2");
+						warningList.push("Cost 3");
 						LOGGER.addWarningMessage("Cost for generator "+ data.id +"is Negative." ,data.DOMID,"topDeco");
 					}
 					if(parseFloat(data.Pmin) < 0) {
 						var pLB = {"key":"p LB", "data":"Value for P min is less than zero.","custom":"true","type":"warning"};
 						warning = true;
+						warningList.push("P Min Bounds");
 						validationWarning.push(pLB);
 						LOGGER.addWarningMessage("Value of P min is less than zero for generator "+ data.id + "." ,data.DOMID,"topDeco");
 					}
@@ -35,6 +40,9 @@
 					if(parseFloat(data.costData.cost1) !== 0.0 || (parseFloat(data.costData.cost2) !== 0) || (parseFloat(data.costData.cost3) !== 0)) {
 						var cost = {"key":"Cost", "data":"Synchronous Condenser has non zero cost(s).","custom":"true","type":"warning"};
 						warning = true;
+						warningList.push("Cost 1");
+						warningList.push("Cost 2");
+						warningList.push("Cost 3");
 						validationWarning.push(cost);
 						LOGGER.addWarningMessage("Cost for Synchronous Generator "+ data.id + " is Negative." ,data.DOMID,"topDeco");
 					}
@@ -54,33 +62,60 @@
 					LOGGER.addWarningMessage("Value of Vg for generator "+ data.id + "is not equal to value of Vm for bus"+ crtNode.bus_i +"." ,data.DOMID,"topDeco");
 				}
 				
+				for(var i = 0; i < validationWarning.length;i++) {
+					if($.inArray(validationWarning[i].key, warningList) !== -1) {
+						validationWarning[i]["classed"] = "warning";
+					}
+				}
+				
 				topDeco["validationWarning"] = validationWarning;
 				topDeco["warning"] = warning;
 				
-				var error = false, validationError = [];
+				
+				var error = false, errorList = [];
 				if((parseFloat(data.Qmin) > parseFloat(data.Qmax)) || (parseFloat(data.Pmin) > parseFloat(data.Pmax))) {
 					var pgBounds = {"key":"Error", "data":"Infeasible p, g bounds.","custom":"true","type":"error"};
 					error = true;
-					validationError.push(pgBounds);
+					
+					if(parseFloat(data.Qmin) > parseFloat(data.Qmax)) {
+						errorList.push("Q Min Bounds");
+						errorList.push("Q Max Bounds");
+					}
+					
+					if(parseFloat(data.Pmin) > parseFloat(data.Pmax)) {
+						errorList.push("P Min Bounds");
+						errorList.push("P Max Bounds");
+					}
+					
+					validationWarning.push(pgBounds);
 					LOGGER.addErrorMessage("Generator " + data.id+ " has infeasible bounds." ,data.DOMID,"topDeco");
 				}
 				
 				if((parseFloat(data.Qg) < parseFloat(data.Qmin)) || (parseFloat(data.Qg)  > parseFloat(data.Qmax))) {
 					var infeasibleQVal = {"key":"Error", "data":"Infeasible Q value.","custom":"true","type":"error"};
 					error = true;
-					validationError.push(infeasibleQVal);
+					errorList.push("Q");
+					validationWarning.push(infeasibleQVal);
 					LOGGER.addErrorMessage("Generator " + data.id+ " has an infeasible Q value." ,data.DOMID,"topDeco");
 				}
 				
 				if((parseFloat(data.Pg) < parseFloat(data.Pmin)) || (parseFloat(data.Pg)  > parseFloat(data.Pmax))) {
 					var infeasiblePVal = {"key":"Error", "data":"Infeasible P value.","custom":"true","type":"error"};
 					error = true;
-					validationError.push(infeasiblePVal);
+					errorList.push("P");
+					validationWarning.push(infeasiblePVal);
 					LOGGER.addErrorMessage("Generator " + data.id+ " has an infeasible P value." ,data.DOMID,"topDeco");
 				}
 				
-				topDeco["validationError"] = validationError;
+				topDeco["validationError"] = validationWarning;
 				topDeco["error"] = error;
+				
+				for(var i = 0; i < validationWarning.length;i++) {
+					if($.inArray(validationWarning[i].key, errorList) !== -1) {
+						validationWarning[i]["classed"] = "error";
+					}
+				}
+				
 				/*Generator Validation:
 				***For Warnings***
 					cost terms are negative - cost1, cost2, cost3
@@ -150,30 +185,30 @@
 			var data = edgesData[index];
 			var warningList=[], warning = false, error = false;
 			//Deep Copy of the Array - JQuery method.
-			var validationWarning = jQuery.extend(true, [], NETWORK.RULES.edgeToolTip);
+			var validationErrorWarning = jQuery.extend(true, [], NETWORK.RULES.edgeToolTip);
 			
 			if(parseFloat(data.edgeData.r) < 0) { 
 				warning = true; 
 				warningList.push("r");
-				validationWarning.push({"key":"Status", "data":"Negative r value on Branch.","custom":"true","type":"warning"});
+				validationErrorWarning.push({"key":"Status", "data":"Negative r value on Branch.","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Negative r value on Branch - "+ data.index + " (" +(data.edgeId) + ")",data.edgeData.DOMID,"edge");	
 			}
 			if(parseFloat(data.edgeData.x) < 0) {
 				warning = true; 
 				warningList.push("x"); 
-				validationWarning.push({"key":"Status", "data":"Negative x value on Branch.","custom":"true","type":"warning"});
+				validationErrorWarning.push({"key":"Status", "data":"Negative x value on Branch.","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Negative x value on Branch - "+ data.index + " (" +(data.edgeId) + ")",data.edgeData.DOMID,"edge");	
 			}
 			if(parseFloat(data.edgeData.b) < 0) { 
 				warning = true;
 				warningList.push("b");
-				validationWarning.push({"key":"Status", "data":"Negative b value on Branch.","custom":"true","type":"warning"});
+				validationErrorWarning.push({"key":"Status", "data":"Negative b value on Branch.","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Negative b value on Branch - "+ data.index + " (" +(data.edgeId) + ")",data.edgeData.DOMID,"edge");	
 			}
 			if(parseFloat(data.edgeData.rateA) === 0) { 
 				warning = true; 
 				warningList.push("Rate A"); 
-				validationWarning.push({"key":"Status", "data":"RateA zero for Branch.","custom":"true","type":"warning"});
+				validationErrorWarning.push({"key":"Status", "data":"RateA zero for Branch.","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Value of 'RateA' is zero for Branch - "+ data.index + " (" +(data.edgeId) + ")",data.edgeData.DOMID,"edge");
 			}
 			
@@ -181,27 +216,21 @@
 				if(Math.abs(Math.log10(data.edgeData.x) - Math.log10(data.edgeData.b)) >= 1) {
 					warning = true;
 					warningList.push("charge"); 
-					validationWarning.push({"key":"charge", "data":"Charge is very different from x.","custom":"true","type":"warning"});
+					validationErrorWarning.push({"key":"charge", "data":"Charge is very different from x.","custom":"true","type":"warning"});
 					LOGGER.addWarningMessage("On Branch - "+ data.index + " (" +(data.edgeId) + ")" + "charge is very different from x.",data.edgeData.DOMID,"edge");	
 				}
 			}
 			
-			for(var i = 0; i < validationWarning.length;i++) {
-				if($.inArray(validationWarning[i].key, warningList) !== -1) {
-					validationWarning[i]["classed"] = "warning";
-				}
-			}
-			
-			
 			if(parseFloat(data.edgeData.rateA) > parseFloat(data.edgeData.UB)) { 
 				warning = true;
-				validationWarning.push({"key":"charge", "data":"Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")","custom":"true","type":"warning"});
+				warningList.push("Rate A"); 
+				validationErrorWarning.push({"key":"charge", "data":"Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")",data.edgeData.DOMID,"edge");
 			}
 			
 			if((parseFloat(data.edgeData.status) === 1)  && (parseFloat(data.source.status) === 0 || parseFloat(data.target.status) === 0)) {
 				warning = true;
-				validationWarning.push({"key":"Mismatch Status", "data":"Branch Status 1 where as Bus status is 0.","custom":"true","type":"warning"});
+				validationErrorWarning.push({"key":"Mismatch Status", "data":"Branch Status 1 where as Bus status is 0.","custom":"true","type":"warning"});
 				if(parseFloat(data.source.status) === 0) {
 					LOGGER.addWarningMessage("Status of Branch - "+ data.index + " (" +(data.edgeId) + ")  is 1 where as status for Bus " + data.source.bus_i + " is 0.",data.edgeData.DOMID,"edge");	
 				}
@@ -213,36 +242,59 @@
 			if(data.edgeType==="Transformer") {
 				if(parseFloat(data.edgeData.b) > 0) {
 					warning = true;
-					validationWarning.push({"key":"Transformer with a non zero charge value.", "data":"Charge value greater than 0 for transformer.","custom":"true","type":"warning"});
+					warningList.push("charge");
+					validationErrorWarning.push({"key":"Transformer with a non zero charge value.", "data":"Charge value greater than 0 for transformer.","custom":"true","type":"warning"});
 					LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ") is a transformer but the charge is greater than zero.",data.edgeData.DOMID,"edge");	
 				}
 			}
-				
-			this.edgeDataObjs.dataObjList[index]["validationWarning"] = validationWarning;
+			
+			this.edgeDataObjs.dataObjList[index]["validationWarning"] = validationErrorWarning;
 			this.edgeDataObjs.dataObjList[index]["warning"] = warning;
 	
-	
-			var ValidationError=[];
+			//errorList is not used for the  edge data
+			var ValidationError=[], errorList = [];
 			if(parseFloat(data.edgeData.rateA) < 0)  { 
 				error = true; 
-				ValidationError.push({"key":"Error", "data":"Thermal Limit is Negative.","custom":"true","type":"error"});
+				errorList.push("Rate A");
+				validationErrorWarning.push({"key":"Error", "data":"Thermal Limit is Negative.","custom":"true","type":"error"});
 				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal Limit is Negative." ,data.edgeData.DOMID,"edge");
 			}
-			if(parseFloat(data.edgeData.angmin) > parseFloat(data.edgeDataangmax)) {
+			if(parseFloat(data.edgeData.angmin) > parseFloat(data.edgeData.angmax)) {
 				error = true;
-				ValidationError.push({"key":"Error", "data":"Infeasible phase angle bounds.","custom":"true","type":"error"});
+				errorList.push("Min angle difference");
+				errorList.push("Max angle difference");
+				validationErrorWarning.push({"key":"Error", "data":"Infeasible phase angle bounds.","custom":"true","type":"error"});
 				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Infeasible Voltage Bounds." ,data.edgeData.DOMID,"edge");
 			}
 			
 			if((parseFloat(data.source.baseKV) !== parseFloat(data.target.baseKV)) && (data.edgeType!=="Transformer")) {
 				error = true;
-				ValidationError.push({"key":"Error", "data":"Inconsistent KVbase values.","custom":"true","type":"error"});
+				validationErrorWarning.push({"key":"Error", "data":"Inconsistent KVbase values.","custom":"true","type":"error"});
 				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Inconsistent KVbase values." ,data.edgeData.DOMID,"edge");
 			}
 			
-			this.edgeDataObjs.dataObjList[index]["validationError"] = ValidationError;
+			if((Math.sqrt(parseFloat(data.solutionData["s-s-t"])) > parseFloat(data.edgeData.rateA)) || (Math.sqrt(parseFloat(data.solutionData["s-t-s"])) > parseFloat(data.edgeData.rateA))) {
+				error = true;
+				errorList.push("Apparent power forward");
+				errorList.push("Apparent power reverse");
+				validationErrorWarning.push({"key":"Error", "data":"Thermal limit and angle difference bound violated.","custom":"true","type":"error"});
+				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal limit and angle difference bound violated." ,data.edgeData.DOMID,"edge");
+			}
+			
+			this.edgeDataObjs.dataObjList[index]["validationError"] = validationErrorWarning;
 			this.edgeDataObjs.dataObjList[index]["error"] = error;
 			
+			for(var i = 0; i < validationErrorWarning.length;i++) {
+				if($.inArray(validationErrorWarning[i].key, warningList) !== -1) {
+					validationErrorWarning[i]["classed"] = "warning";
+				}
+			}
+			
+			for(var i = 0; i < validationErrorWarning.length;i++) {
+				if($.inArray(validationErrorWarning[i].key, errorList) !== -1) {
+					validationErrorWarning[i]["classed"] = "error";
+				}
+			}
 		/*Edge Validation:
 			***For Warning***
 			r value is negative
@@ -284,17 +336,37 @@
 			
 			var erroList=[], error = false;
 			
-			if(crtNode.Vmin > crtNode.Vmax) {
+			//Deep copy of the array - for generation of the tool-tip
+			var validationError = jQuery.extend(true, [], NETWORK.RULES.nodeToolTip);
+				
+			if(parseFloat(crtNode.Vmin) > parseFloat(crtNode.Vmax)) {
 				error = true;
-				erroList.push({"key":"Error", "data":"Infeasible Voltage Bounds.","custom":"true","type":"error"});
+				erroList.push("V Max");
+				erroList.push("V Min");
+				validationError.push({"key":"Error", "data":"Infeasible Voltage Bounds.","custom":"true","type":"error"});
 				LOGGER.addErrorMessage("'" + crtNode.DOMID + "' - Infeasible Voltage Bounds.",crtNode.DOMID,"node");	
 			}
-			crtNode["validationError"] = erroList;
+			
+			if((parseFloat(crtNode.Vm) < parseFloat(crtNode.Vmin)) || (parseFloat(crtNode.Vm)> parseFloat(crtNode.Vmax))) {
+				error = true;
+				erroList.push("Voltage");
+				validationError.push({"key":"Error", "data":"Infeasible Voltage value.","custom":"true","type":"error"});
+				LOGGER.addErrorMessage("'" + crtNode.DOMID + "' - Infeasible Voltage value.",crtNode.DOMID,"node");	
+			}
+			
+			for(var i = 0; i < validationError.length;i++) {
+				if($.inArray(validationError[i].key, erroList) !== -1) {
+					validationError[i]["classed"] = "error";
+				}
+			}
+				
+			crtNode["validationError"] = validationError;
 			crtNode["error"] = error;
 			
 			/*Node Validation
 				***No warnings***
-				***Errors  - Infeasible voltage bounds - error if Vmin > Vmax*/
+				***Errors  - Infeasible voltage bounds - error if Vmin > Vmax
+								  - Infeasible voltage values.*/
 		}
 	};
 
