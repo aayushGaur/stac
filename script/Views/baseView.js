@@ -263,7 +263,7 @@ VIEWS.SharedFunctionality = (function(){
 			
 			if(typeof eleData.DOMID !== 'undefined') {
 				eleID = eleData.DOMID;
-				d3.selectAll(".edge").each(function(d){
+				d3.select("#parentSvgNode").selectAll(".edge").each(function(d){
 					if(d.source.DOMID === eleID || d.target.DOMID === eleID) {
 						neighbourNodes.push(d.source);
 						neighbourNodes.push(d.target);
@@ -274,7 +274,7 @@ VIEWS.SharedFunctionality = (function(){
 			else {
 				eleID = eleData.source.DOMID;
 				var eleTargetID = eleData.target.DOMID;
-				d3.selectAll(".edge").each(function(d){
+				d3.select("#parentSvgNode").selectAll(".edge").each(function(d){
 					if(d.source.DOMID === eleID || d.target.DOMID === eleID || d.source.DOMID === eleTargetID || d.target.DOMID === eleTargetID) {
 						neighbourNodes.push(d.source);
 						neighbourNodes.push(d.target);
@@ -301,7 +301,7 @@ VIEWS.SharedFunctionality = (function(){
 			var ty = (-b.y * s + (ch / s - h) * s / 2);
 			zoom.translate([tx, ty]).scale(s);
 			
-			var vis = d3.select("g");
+			var vis = d3.select("#parentSvgNode").select("g");
 			vis .transition().duration(750) .attr("transform", "translate(" + zoom.translate() + ") scale(" + zoom.scale() + ")");
 		},
 	

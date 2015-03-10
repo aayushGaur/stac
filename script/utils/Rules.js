@@ -72,11 +72,11 @@ NETWORK.RULES = {
 		{"key":"ToolTipTitle", "data":"id","units":"-NA-","preTitleValText":"Generator ","postTitleValText":""},
 		{"key":"Bus Id", "data":"bus","units":"-NA-"},
 		{"key":"P", "data":"Pg","units":"MW","nature":"dynamic"},
-		{"key":"P Min Bounds", "data":"Pmin","units":"MW","nature":"dynamic"},
-		{"key":"P Max Bounds", "data":"Pmax","units":"MW","nature":"dynamic"},
+		{"key":"P Min Bounds", "data":"Pmin","units":"MW","nature":"static"},
+		{"key":"P Max Bounds", "data":"Pmax","units":"MW","nature":"static"},
 		{"key":"Q", "data":"Qg","units":"MVAr","nature":"dynamic"},
-		{"key":"Q Min Bounds", "data":"Qmin","units":"MVAr","nature":"dynamic"},
-		{"key":"Q Max Bounds", "data":"Qmax","units":"MVAr","nature":"dynamic"},
+		{"key":"Q Min Bounds", "data":"Qmin","units":"MVAr","nature":"static"},
+		{"key":"Q Max Bounds", "data":"Qmax","units":"MVAr","nature":"static"},
 		{"key":"Cost 1", "data":"costData.cost1","units":"$/MW hr squared"},
 		{"key":"Cost 2", "data":"costData.cost2","units":"$/MW hr"},
 		{"key":"Cost 3", "data":"costData.cost3","units":"$/MW hr"},
@@ -96,41 +96,22 @@ NETWORK.RULES = {
 		
 		/*For solution data*/
 		/**Active power forward/ active power reverse**/
-		{"key":
+		{"key": "Active power forward",
+				/* The following is the sample structure using which the keys can be made intelligent.
 				{
-					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"Active power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
-				}, 
+					"phVals":["source.bus_i","target.bus_i"],These are the paths of the place holder values that need to be extracted from the data.
+					"kt":"Active power from 'bus %1%' to 'bus %2%'"This is the key text (kt) used to make the dynamic key.
+				},*/ 
 			"data":"solutionData.p-s-t","units":"MW","nature":"dynamic"},
-		{"key":
-				{
-					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"Reactive power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
-				}, 
+		{"key":"Reactive power forward",
 			"data":"solutionData.q-s-t","units":"MVAr","nature":"dynamic"},
-		{"key":
-				{
-					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"Active power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
-				},
+		{"key":"Active power reverse",				
 			"data":"solutionData.p-t-s","units":"MW","nature":"dynamic"},
-		{"key":
-				{
-					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"Reactive power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
-				},
+		{"key":"Reactive power reverse",
 			"data":"solutionData.q-t-s","units":"MVAr","nature":"dynamic"},
-		{"key":
-				{
-					"phVals":["source.bus_i","target.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"Apparent power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
-				},
+		{"key":"Apparent power forward",
 		"data":"solutionData.s-s-t","units":"MVA","nature":"dynamic"},
-		{"key":
-				{
-					"phVals":["target.bus_i","source.bus_i"],/*These are the paths of the place holder values that need to be extracted from the data.*/
-					"kt":"Apparent power from 'bus %1%' to 'bus %2%'"/*This is the key text (kt) used to make the dynamic key.*/
-				},
+		{"key":"Apparent power reverse",
 		"data":"solutionData.s-t-s","units":"MVA","nature":"dynamic"},
 	],
 	
@@ -153,7 +134,7 @@ NETWORK.RULES = {
 	],
 	
 	busHelpToolTip : [
-		{"key":["helpDesc"], "data":"This is bus with ID '%1%'."},
+		{"key":["helpDesc"], "data":"This is a bus with ID '%1%'."},
 	],
 	
 	topDecoHelpToolTip : [

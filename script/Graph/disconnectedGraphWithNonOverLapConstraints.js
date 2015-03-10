@@ -12,19 +12,12 @@ function DisconnectedGraph(){
 	$("#dropInput").addClass("dropAlongWithGraphTopology");*/
 	$("#dropInput").hide();
 	
-	//Calling the graph object.
-	drawDisconnectedGraph();
-	
-	
 	var helper = new NETWORK.Help();
 	helper.drawGraph();
 	helper.updateToolTip();
 	
-	/*console.log(JSON.stringify(NETWORK_OBJECTS.branchDataObj.dataObjList));
-	console.log(JSON.stringify(NETWORK_OBJECTS.busDataObj.dataObjList));
-	console.log(JSON.stringify(NETWORK_OBJECTS.generatorCostDataObj.dataObjList));
-	console.log(JSON.stringify(NETWORK_OBJECTS.generatorDataObj.dataObjList));*/
-	
+	//Calling the graph object.
+	drawDisconnectedGraph();
 	
 }	
 

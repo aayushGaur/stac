@@ -119,7 +119,7 @@ var LOGGER;
 		
 		myColaHelp = cola.d3adaptor().linkDistance(VIEWS.SharedFunctionality.R * 12).avoidOverlaps(true).size([width, height]);
 		
-		var helpSvg = d3.select("body").append("svg").attr({"id":"helpSvgNode","pointer-events": "all","display":"none",}).on("dblclick.zoom", null);
+		var helpSvg = d3.select("body").append("svg").attr({"id":"helpSvgNode","pointer-events": "all",}).on("dblclick.zoom", null);
 		
 		helpSvg.append('rect').attr({'class':'backgroundHelp','fill':'wheat','width':"100%",'height':"100%","style":"stroke-width:4;stroke:grey"}).call(zoomHelp.on("zoom", redrawHelpWithDrag));
 		

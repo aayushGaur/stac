@@ -13,6 +13,7 @@
 			{
 				var topDeco = topDecorators[index], warning = false;
 				var data = topDeco.topDecoData;
+				var warningList =[];
 				//Deep Copy of the Array - JQuery method.
 				var validationWarning = jQuery.extend(true, [], NETWORK.RULES.topDecoToolTip);
 				
@@ -63,6 +64,21 @@
 					validationError.push(pgBounds);
 					LOGGER.addErrorMessage("Generator " + data.id+ " has infeasible bounds." ,data.DOMID,"topDeco");
 				}
+				
+				if((parseFloat(data.Qg) < parseFloat(data.Qmin)) || (parseFloat(data.Qg)  > parseFloat(data.Qmax))) {
+					var infeasibleQVal = {"key":"Error", "data":"Infeasible Q value.","custom":"true","type":"error"};
+					error = true;
+					validationError.push(infeasibleQVal);
+					LOGGER.addErrorMessage("Generator " + data.id+ " has an infeasible Q value." ,data.DOMID,"topDeco");
+				}
+				
+				if((parseFloat(data.Pg) < parseFloat(data.Pmin)) || (parseFloat(data.Pg)  > parseFloat(data.Pmax))) {
+					var infeasiblePVal = {"key":"Error", "data":"Infeasible P value.","custom":"true","type":"error"};
+					error = true;
+					validationError.push(infeasiblePVal);
+					LOGGER.addErrorMessage("Generator " + data.id+ " has an infeasible P value." ,data.DOMID,"topDeco");
+				}
+				
 				topDeco["validationError"] = validationError;
 				topDeco["error"] = error;
 				/*Generator Validation:
@@ -93,9 +109,9 @@
 					warning = true; 
 					warningList.push("P"); 
 					validationWarning.push({"key":"Status", "data":"Negative P value on Bus load.","custom":"true","type":"warning"});
-					LOGGER.addWarningMessage("Bus "+ crtNode.bus_i +" has Negative P value." ,data.DOMID,"bottomDeco");
-					
+					LOGGER.addWarningMessage("Bus "+ crtNode.bus_i +" has Negative P value." ,data.DOMID,"bottomDeco");					
 				}
+				
 				if(data.Qd < 0) { 
 					warning = true;
 					warningList.push("Q"); 

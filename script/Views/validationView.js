@@ -3,14 +3,14 @@ VIEWS.ValidationView  = (function(){
 	return {
 		performValidation : function() {
 			//Gradient for lineCharge Edges - Warning view
-			var warningGradient = d3.select("defs").append("svg:linearGradient").attr({'id':'LineChargeGradientWarning','x1':'0%','y1':'0%','x2':'100%','y2':'0%','spreadMethod':'pad'});
+			var warningGradient = d3.select("#parentSvgNode").select("defs").append("svg:linearGradient").attr({'id':'LineChargeGradientWarning','x1':'0%','y1':'0%','x2':'100%','y2':'0%','spreadMethod':'pad'});
 			warningGradient.append("svg:stop").attr({'offset': '20%','stop-color':'orange','stop-opacity': 1});
 			warningGradient.append("svg:stop").attr({'offset': '20%','stop-color':'white','stop-opacity': 1});
 			warningGradient.append("svg:stop").attr({'offset': '80%','stop-color':'white','stop-opacity': 1});
 			warningGradient.append("svg:stop").attr({'offset': '80%','stop-color':'orange','stop-opacity': 1});
 			
 			//Gradient for lineCharge Edges - Error view
-			var errorGradient = d3.select("defs").append("svg:linearGradient").attr({'id':'LineChargeGradientError','x1':'0%','y1':'0%','x2':'100%','y2':'0%','spreadMethod':'pad'});
+			var errorGradient = d3.select("#parentSvgNode").select("defs").append("svg:linearGradient").attr({'id':'LineChargeGradientError','x1':'0%','y1':'0%','x2':'100%','y2':'0%','spreadMethod':'pad'});
 			errorGradient.append("svg:stop").attr({'offset': '20%','stop-color':'red','stop-opacity': 1});
 			errorGradient.append("svg:stop").attr({'offset': '20%','stop-color':'white','stop-opacity': 1});
 			errorGradient.append("svg:stop").attr({'offset': '80%','stop-color':'white','stop-opacity': 1});
@@ -20,17 +20,17 @@ VIEWS.ValidationView  = (function(){
 			var crtClass = "error";
 			var crtDecoID = "LineChargeGradientError";
 			setInterval(function() {
-				d3.selectAll(".errorWarning").classed(crtClass, false);
+				d3.select("#parentSvgNode").selectAll(".errorWarning").classed(crtClass, false);
 				crtClass = crtClass === 'error' ? 'error' : 'error';
-				d3.selectAll(".errorWarning").classed(crtClass, true);
+				d3.select("#parentSvgNode").selectAll(".errorWarning").classed(crtClass, true);
 			//Added to alternate the color of the Line Charge Decorator.
-				d3.selectAll(".LineChargeDecoErrorWarning").style("fill", "url(#"+crtDecoID +")");
+				d3.select("#parentSvgNode").selectAll(".LineChargeDecoErrorWarning").style("fill", "url(#"+crtDecoID +")");
 				crtDecoID = crtDecoID === 'LineChargeGradientError' ? 'LineChargeGradientError' : 'LineChargeGradientError';
-				d3.selectAll(".LineChargeDecoErrorWarning").style("fill", "url(#"+crtDecoID +")");
+				d3.select("#parentSvgNode").selectAll(".LineChargeDecoErrorWarning").style("fill", "url(#"+crtDecoID +")");
 			}, 5);
 				
 			//Update the UI of the edges based on the errors and warnings.
-			d3.selectAll(".edge").each(function(d){ 
+			d3.select("#parentSvgNode").selectAll(".edge").each(function(d){ 
 				var bWarning = d.warning;
 				var bError = d.error;
 				var crtEle = d3.select(this);
@@ -46,7 +46,7 @@ VIEWS.ValidationView  = (function(){
 			});
 			
 			//Update the UI of the edge decorator based on the errors and warnings.
-			d3.selectAll(".edgeDecorator").each(function(d){ 
+			d3.select("#parentSvgNode").selectAll(".edgeDecorator").each(function(d){ 
 				var bWarning = d.warning;
 				var bError = d.error;
 				var crtEle = d3.select(this);
@@ -70,12 +70,12 @@ VIEWS.ValidationView  = (function(){
 			});
 			
 			//Only Errors for Nodes.
-			d3.selectAll(".node, .nodeLabel").each(function(d){
+			d3.select("#parentSvgNode").selectAll(".node, .nodeLabel").each(function(d){
 				if(d.error) 
 					d3.select(this).classed("error", true);
 			});
 			
-			d3.selectAll(".topDecoratorGroup").each(function(d){
+			d3.select("#parentSvgNode").selectAll(".topDecoratorGroup").each(function(d){
 				var crtDecoGroup = d3.select(this);
 				crtDecoGroup.selectAll(".topDecoCircle, .labelText ,.decorators ").each(function(d){ 
 					if(typeof this.attributes.index !== "undefined") {
@@ -100,7 +100,7 @@ VIEWS.ValidationView  = (function(){
 			});
 			
 			//Only Warning for the Bottom Decorators.
-			d3.selectAll(".bottomDecoratorGroup").each(function(d){
+			d3.select("#parentSvgNode").selectAll(".bottomDecoratorGroup").each(function(d){
 				var crtEle = d3.select(this);	
 				for(var index = 0; index < d.bottomDecorators.length;index++) {
 					if(d.bottomDecorators[index].warning) {
