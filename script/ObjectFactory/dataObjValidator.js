@@ -56,11 +56,11 @@
 				}
 				
 				if(parseFloat(data.Vg) !== parseFloat(crtNode.Vm)) {
-					var VgWarning = {"key":"Vg", "data":"The voltage of generator "+ data.id + " is not equal to voltage of bus"+ crtNode.bus_i +".","custom":"true","type":"warning"};
+					var VgWarning = {"key":"Vg", "data":"The voltage of generator "+ data.id + " is not equal to voltage of bus "+ crtNode.bus_i +".","custom":"true","type":"warning"};
 					warning = true;
 					warningList.push("Voltage");
 					validationWarning.push(VgWarning);
-					LOGGER.addWarningMessage("The voltage of generator "+ data.id + " is not equal to voltage of bus"+ crtNode.bus_i +"." ,data.DOMID,"topDeco");
+					LOGGER.addWarningMessage("The voltage of generator "+ data.id + " is not equal to voltage of bus "+ crtNode.bus_i +"." ,data.DOMID,"topDeco");
 				}
 				
 				for(var i = 0; i < validationWarning.length;i++) {
@@ -101,7 +101,7 @@
 				}
 				
 				if((parseFloat(data.Pg) < parseFloat(data.Pmin)) || (parseFloat(data.Pg)  > parseFloat(data.Pmax))) {
-					var infeasiblePVal = {"key":"Error", "data":"P value.is out of bounds.","custom":"true","type":"error"};
+					var infeasiblePVal = {"key":"Error", "data":"P value is out of bounds.","custom":"true","type":"error"};
 					error = true;
 					errorList.push("P");
 					validationWarning.push(infeasiblePVal);
