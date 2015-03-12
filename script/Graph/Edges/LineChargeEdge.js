@@ -29,7 +29,6 @@
 							.data(this.data).enter()
 							.append("rect").attr({"class":"edgeDecorator lineChargeEdges","x":0,"y":0,"height": VIEWS.SharedFunctionality.R/2,"width": VIEWS.SharedFunctionality.R})
 								.style("fill", function(d) { if(parseInt(d.edgeData.status) === 0) { return "url(#LineChargeGradientOffStatus)"; } else { 
-										console.log(svg.attr("id"));
 										if (svg.attr("id") === "svgGraph") {
 											return "url(#LineChargeGradient)";
 										}
