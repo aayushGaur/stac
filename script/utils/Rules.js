@@ -75,6 +75,7 @@ NETWORK.RULES = {
 		{"key":"P Min Bounds", "data":"Pmin","units":"MW","nature":"static"},
 		{"key":"P Max Bounds", "data":"Pmax","units":"MW","nature":"static"},
 		{"key":"Q", "data":"Qg","units":"MVAr","nature":"dynamic"},
+		{"key":"Voltage", "data":"Vg","units":"Volts p.u.","nature":"dynamic"},
 		{"key":"Q Min Bounds", "data":"Qmin","units":"MVAr","nature":"static"},
 		{"key":"Q Max Bounds", "data":"Qmax","units":"MVAr","nature":"static"},
 		{"key":"Cost 1", "data":"costData.cost1","units":"$/MW hr squared"},

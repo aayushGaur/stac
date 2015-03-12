@@ -7,6 +7,8 @@ VIEWS.DataView = (function(){
 			d3.select("#parentSvgNode").selectAll(".error").each(function(d) {d3.select(this).classed("error", false); });
 			d3.select("#parentSvgNode").selectAll(".error-stroke").each(function(d) { d3.select(this).classed("error-stroke", false); });
 			d3.select("#parentSvgNode").selectAll(".errorWarning").each(function(d) { d3.select(this).classed("errorWarning", false); });
+			d3.select("#parentSvgNode").selectAll(".error-fill").each(function(d) { d3.select(this).classed("error-fill", false); });
+			d3.select("#parentSvgNode").selectAll(".warning-fill").each(function(d) { d3.select(this).classed("warning-fill", false); });
 			
 			//For Line Charge Decorators.
 			d3.select("#parentSvgNode").selectAll(".LineChargeDecoErrorWarning, .lineChargeEdges").classed("LineChargeDecoErrorWarning", false)

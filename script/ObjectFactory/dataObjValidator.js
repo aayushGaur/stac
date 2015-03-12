@@ -56,10 +56,11 @@
 				}
 				
 				if(parseFloat(data.Vg) !== parseFloat(crtNode.Vm)) {
-					var VgWarning = {"key":"Vg", "data":"Value Vg on the generator is not equal to value of Vm on the bus.","custom":"true","type":"warning"};
+					var VgWarning = {"key":"Vg", "data":"The voltage of generator "+ data.id + "is not equal to voltage of bus"+ crtNode.bus_i +".","custom":"true","type":"warning"};
 					warning = true;
+					warningList.push("Voltage");
 					validationWarning.push(VgWarning);
-					LOGGER.addWarningMessage("Value of Vg for generator "+ data.id + "is not equal to value of Vm for bus"+ crtNode.bus_i +"." ,data.DOMID,"topDeco");
+					LOGGER.addWarningMessage("The voltage of generator "+ data.id + "is not equal to voltage of bus"+ crtNode.bus_i +"." ,data.DOMID,"topDeco");
 				}
 				
 				for(var i = 0; i < validationWarning.length;i++) {
@@ -92,19 +93,19 @@
 				}
 				
 				if((parseFloat(data.Qg) < parseFloat(data.Qmin)) || (parseFloat(data.Qg)  > parseFloat(data.Qmax))) {
-					var infeasibleQVal = {"key":"Error", "data":"Infeasible Q value.","custom":"true","type":"error"};
+					var infeasibleQVal = {"key":"Error", "data":"Q value is out of bounds.","custom":"true","type":"error"};
 					error = true;
 					errorList.push("Q");
 					validationWarning.push(infeasibleQVal);
-					LOGGER.addErrorMessage("Generator " + data.id+ " has an infeasible Q value." ,data.DOMID,"topDeco");
+					LOGGER.addErrorMessage("Generator " + data.id+ " Q value is out of bounds." ,data.DOMID,"topDeco");
 				}
 				
 				if((parseFloat(data.Pg) < parseFloat(data.Pmin)) || (parseFloat(data.Pg)  > parseFloat(data.Pmax))) {
-					var infeasiblePVal = {"key":"Error", "data":"Infeasible P value.","custom":"true","type":"error"};
+					var infeasiblePVal = {"key":"Error", "data":"P value.is out of bounds.","custom":"true","type":"error"};
 					error = true;
 					errorList.push("P");
 					validationWarning.push(infeasiblePVal);
-					LOGGER.addErrorMessage("Generator " + data.id+ " has an infeasible P value." ,data.DOMID,"topDeco");
+					LOGGER.addErrorMessage("Generator " + data.id+ " P value is out of bounds." ,data.DOMID,"topDeco");
 				}
 				
 				topDeco["validationError"] = validationWarning;
@@ -217,7 +218,7 @@
 					warning = true;
 					warningList.push("charge"); 
 					validationErrorWarning.push({"key":"charge", "data":"Charge is very different from x.","custom":"true","type":"warning"});
-					LOGGER.addWarningMessage("On Branch - "+ data.index + " (" +(data.edgeId) + ")" + "charge is very different from x.",data.edgeData.DOMID,"edge");	
+					LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - charge is very different from x.",data.edgeData.DOMID,"edge");	
 				}
 			}
 			
@@ -350,8 +351,8 @@
 			if((parseFloat(crtNode.Vm) < parseFloat(crtNode.Vmin)) || (parseFloat(crtNode.Vm)> parseFloat(crtNode.Vmax))) {
 				error = true;
 				erroList.push("Voltage");
-				validationError.push({"key":"Error", "data":"Infeasible Voltage value.","custom":"true","type":"error"});
-				LOGGER.addErrorMessage("'" + crtNode.DOMID + "' - Infeasible Voltage value.",crtNode.DOMID,"node");	
+				validationError.push({"key":"Error", "data":"Voltage value is out of bounds.","custom":"true","type":"error"});
+				LOGGER.addErrorMessage("'" + crtNode.DOMID + "' - Voltage value is out of bounds.",crtNode.DOMID,"node");	
 			}
 			
 			for(var i = 0; i < validationError.length;i++) {

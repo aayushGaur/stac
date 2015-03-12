@@ -35,7 +35,7 @@ VIEWS.ValidationView  = (function(){
 				var bError = d.error;
 				var crtEle = d3.select(this);
 				if(bError && bWarning) {
-					crtEle.classed("errorWarning", true)
+					crtEle.classed("error", true)
 				}
 				else if(bError) {
 					crtEle.classed("error", true)
@@ -51,8 +51,11 @@ VIEWS.ValidationView  = (function(){
 				var bError = d.error;
 				var crtEle = d3.select(this);
 				if(bError && bWarning) {
-					crtEle.classed("errorWarning", true)
-							.classed("LineChargeDecoErrorWarning", true);
+					crtEle.classed("error-stroke", true)
+							//.classed("LineChargeDecoErrorWarning", true);
+					if(crtEle.classed("lineChargeEdges")) {
+						crtEle.style("fill", "url(#LineChargeGradientError)");
+					}	
 				}
 				else if(bError) {
 					crtEle.classed("error-stroke", true);
@@ -84,15 +87,25 @@ VIEWS.ValidationView  = (function(){
 						var topDeco = d.topDecorators[index];
 						var bWarning = topDeco.warning;
 						var bError = topDeco.error;
-				
+						
+						
 						if(bError && bWarning) {
 							crtEle.classed("errorWarning", true);
+							if(this.classList.contains("labelText")) {
+								crtEle.classed("error-fill", true);
+							}
 						}
 						else if(bError) {
 							crtEle.classed("error-stroke", true);
+							if(this.classList.contains("labelText")) {
+								crtEle.classed("error-fill", true);
+							}
 						}
 						else if(bWarning) {
 							crtEle.classed("warning-stroke", true);
+							if(this.classList.contains("labelText")) {
+								crtEle.classed("warning-fill", true);
+							}
 						}
 						else {/* Do logging here that no error or Warning.*/ }
 					}

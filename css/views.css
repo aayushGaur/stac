@@ -5,6 +5,14 @@
 	fill: orange;
 }
 
+.warning-fill {
+	fill: orange;
+}
+
+.error-fill {
+	fill: red;
+}
+
 .warning-stroke {
 	stroke: orange;
 }

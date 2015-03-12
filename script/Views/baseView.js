@@ -1,4 +1,5 @@
 // global namespace
+// global namespace
 var VIEWS = VIEWS || {};
 
 //Namespace for handling the shared functionality of the Data(validation/Error) and solution view.
@@ -13,8 +14,14 @@ VIEWS.SharedFunctionality = (function(){
 	};
 	
 	var triggerCustomDrag = function(Node,X,Y) {	
-		var node, xMouseDown, yMouseDown, xMouseMove, yMouseMove, xMouseUp, yMouseUp;
-		node = d3.select('.node').node();
+		var node, xMouseDown, yMouseDown, xMouseMove, yMouseMove, xMouseUp, yMouseUp, parentEle;
+		if($("#parentSvgNode").is(":visible")) {
+			parentEle = d3.select("#parentSvgNode");
+		}
+		else {
+			parentEle = d3.select("#helpSvgNode");
+		}
+		node = parentEle.select('.node').node();
 		xMouseDown = xMouseMove = xMouseUp = 0.1;
 		yMouseDown = yMouseMove = yMouseUp = 0.1;
 		node.dispatchEvent(createCustomMouseEvent('mousedown', xMouseDown,yMouseDown,false));
@@ -135,13 +142,21 @@ VIEWS.SharedFunctionality = (function(){
 		
 		/** Toggles the auto layout for the Graphs - If Auto layout is false and the Graph has Node locations then as per functionality sets the fixed position to false.**/
 		toggleAutoLayout : function() {
+				var parentEle;
+				if($("#parentSvgNode").is(":visible")) {
+						parentEle = d3.select("#parentSvgNode");
+				}
+				else {
+					parentEle = d3.select("#helpSvgNode");
+				}
+				
 				if(VIEWS.SharedFunctionality.autoLayout) {
 					$("#autoLayoutToggle").toggleClass("activeButton");
-					d3.selectAll(".busIcon").attr("isFixed", function (d) { 
-						d.px = d.x;d.py = d.y;
-						d.fixed |= 8;
-					});
 					VIEWS.SharedFunctionality.autoLayout = false;
+					parentEle.selectAll(".busIcon").attr("isFixed", function (d) { 
+							d.px = d.x;d.py = d.y;
+							d.fixed |= 8;
+						});
 				}
 				else {
 					$("#autoLayoutToggle").toggleClass("activeButton");
@@ -312,13 +327,14 @@ VIEWS.SharedFunctionality = (function(){
 		showHelp : function() {
 			if(!VIEWS.SharedFunctionality.bShowHelp) {
 				VIEWS.SharedFunctionality.bShowHelp = true;
-				$("#helpSvgNode").show();
+				//Commented as hiding the graph also hides the associated fills.
+				//$("#helpSvgNode").show();
 				$("#parentSvgNode").hide();
 				$("#showHelp").addClass("activeButton");
 			}
 			else {
 				VIEWS.SharedFunctionality.bShowHelp = false;
-				$("#helpSvgNode").hide();
+				//$("#helpSvgNode").hide();
 				$("#parentSvgNode").show();
 				$("#showHelp").removeClass("activeButton");
 			}
