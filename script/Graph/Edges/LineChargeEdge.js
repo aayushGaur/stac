@@ -4,7 +4,15 @@
 	NETWORK.GRAPH.LineChargeEdges.prototype.consructor = NETWORK.GRAPH.LineChargeEdges;	
 	
 	NETWORK.GRAPH.LineChargeEdges.prototype.decorateEdges = function(svg, edgesData) {
-		var gradient = svg.append("svg:defs").append("svg:linearGradient").attr({"id": "LineChargeGradient","x1":"0%","y1":"0%","x2":"100%","y2":"0%","spreadMethod":"pad"});
+		var gradient = svg.append("svg:defs").append("svg:linearGradient").attr({"x1":"0%","y1":"0%","x2":"100%","y2":"0%","spreadMethod":"pad"})
+		.attr("id",function() {
+			if (svg.attr("id") === "svgGraph") {
+				return "LineChargeGradient";
+			}
+			else {
+				return "LineChargeGradientHelp";
+			}
+		});
 		gradient.append("svg:stop").attr({"offset":"20%","stop-color":"black","stop-opacity":1});
 		gradient.append("svg:stop").attr({"offset": "20%","stop-color": "white","stop-opacity": 1});
 		gradient.append("svg:stop").attr({"offset":"80%","stop-color":"white","stop-opacity":1});
@@ -20,7 +28,16 @@
 		this.edgeDecorator = svg.selectAll(".edgeCentre")
 							.data(this.data).enter()
 							.append("rect").attr({"class":"edgeDecorator lineChargeEdges","x":0,"y":0,"height": VIEWS.SharedFunctionality.R/2,"width": VIEWS.SharedFunctionality.R})
-								.style("fill", function(d) { if(parseInt(d.edgeData.status) === 0) { return "url(#LineChargeGradientOffStatus)"; } else { return "url(#LineChargeGradient)";}	})
+								.style("fill", function(d) { if(parseInt(d.edgeData.status) === 0) { return "url(#LineChargeGradientOffStatus)"; } else { 
+										console.log(svg.attr("id"));
+										if (svg.attr("id") === "svgGraph") {
+											return "url(#LineChargeGradient)";
+										}
+										else {
+											return "url(#LineChargeGradientHelp)";
+										}
+									}
+								})
 								.classed("OffStatus", function(d) { if(parseInt(d.edgeData.status) === 0) { return true; }	})
 								.on("mouseover", function (d) { 
 									var warningData = d.validationWarning;

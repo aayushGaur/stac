@@ -153,7 +153,7 @@ VIEWS.SharedFunctionality = (function(){
 				if(VIEWS.SharedFunctionality.autoLayout) {
 					$("#autoLayoutToggle").toggleClass("activeButton");
 					VIEWS.SharedFunctionality.autoLayout = false;
-					parentEle.selectAll(".busIcon").attr("isFixed", function (d) { 
+					d3.selectAll(".busIcon").attr("isFixed", function (d) { 
 							d.px = d.x;d.py = d.y;
 							d.fixed |= 8;
 						});
