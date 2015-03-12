@@ -124,6 +124,7 @@ function drawDemoGraph(file) {
 	FILE = file;
 	var ObjectFactory = new NETWORK.ObjectFactory();
 	NETWORK_OBJECTS = ObjectFactory.getNetworkDataObjects();
+	var Solution = new NETWORK.Solution(NETWORK_OBJECTS);
 	
 	setTimeout(function() {
 		$("#d3div").css("display","block");
