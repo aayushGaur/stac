@@ -57,7 +57,7 @@
 				break;
 			}
 		}
-		return networkConfig;
+		return networkConfig;	
 	};
 		
 	/**
@@ -70,12 +70,28 @@
 		var allObjectInfo = [];
 		
 		for(key in _lclObjBeginIdentifiers) {
-			if(FILE.search(_lclObjBeginIdentifiers[key]) !== -1) {
 				var name = key;
-				var beginLine = FILE.search(_lclObjBeginIdentifiers[key]);
-				var endLine = FILE.indexOf(_lclObjEndIdentifiers[key],beginLine);
-				var objInfo = { "name" : name, "beginChar": beginLine, "endChar": endLine }
-				allObjectInfo.push(objInfo);
+				var searchParamsArray = _lclObjBeginIdentifiers[key];
+				var beginLine, lineGap;
+				//Check for all the rules for an object - one at a time.
+				for(var i = 0; i < searchParamsArray.length ; i++) {
+					if(FILE.search(searchParamsArray[i].toString()) !== -1) {
+						
+						//Based on the line on which the data is found we make use of the line gap.
+						if(i === 1) {
+							lineGap = 2;
+						}
+						else {
+							lineGap = 1;
+						}
+						beginLine = FILE.search(searchParamsArray[i]);
+						var endLine = FILE.indexOf(_lclObjEndIdentifiers[key],beginLine);
+						var objInfo = { "name" : name, "beginChar": beginLine, "endChar": endLine,"lineGap":lineGap }
+						allObjectInfo.push(objInfo);
+						
+						//break the loop as soon the data for an object is found
+						break;
+				}
 			}
 		}
 		
@@ -109,19 +125,36 @@
 			valStartIndex = 3;
 			//The regular expression has been added because the new line character at the end of the line was
 			//forcing JS  to make the last property name a string and hence inaccessible from the object.
-			objProperties = (content[contentIndex].replace(/(\r\n|\n|\r)/gm,"")).split('\t');
+			
+			console.log(content);
+			//The second replace statement has been added to convert all the spaces to tabs and the trim has been added to take care of all the leading and trailing spaces.
+			objProperties = (((content[rawDataObj.lineGap].replace(/(\r\n|\n|\r)/gm,"")).trim()).replace(/\s{2,}/g, '\t')).split('\t');
 		}
 		
 		//content.length-1 has been taken because the index starts from 0 whereas the length is calculated from 1.
 		for(var valIndexer = valStartIndex; valIndexer < (content.length-1); valIndexer++)
 		{
-			var eachObjectData = content[valIndexer].split('\t');
-			var actualDataObj = {};
-			for(var propIndexer = 1; propIndexer < objProperties.length; propIndexer++)
-			{
-				actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer]).toString());
-			}
-			dataObjectWrapper.dataObjList.push(actualDataObj);
+			var crtContent = content[valIndexer];
+			//Updated the code to replace all the spaces by tab and then do the parsing.
+			crtContent = $.trim(crtContent);
+			if(crtContent !== "") {
+				
+				if(crtContent.indexOf(' ') !== -1)	{
+					crtContent = crtContent.replace(/\s{1,}/g, '\t');
+				}
+				var eachObjectData = crtContent.split('\t');
+				
+				var actualDataObj = {};
+				
+				console.log(eachObjectData);
+				console.log(objProperties);
+				
+				for(var propIndexer = 1; propIndexer < objProperties.length; propIndexer++)
+				{
+					actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer-1]).toString());
+				}
+				dataObjectWrapper.dataObjList.push(actualDataObj);
+			}		
 		}
 		return dataObjectWrapper;
 	};

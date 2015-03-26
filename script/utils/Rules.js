@@ -2,12 +2,13 @@
 NETWORK.RULES = {
 	parser : {
 		ObjectIdentifiers : {
+			// The structure of the Beginning Data has been upated 
 			BeginningData: {
-				"AreaData" : "%% area data",
-				"BusData" : "%% bus data",
-				"GeneratorData" : "%% generator data",
-				"GeneratorCostData" : "%% generator cost data",
-				"BranchData" : "%% branch data",
+				"AreaData" : ['%% area data','mpc.areas = \\[','mpc.areas= \\[','mpc.areas= \\['],
+				"BusData" : ['%% bus data','mpc.bus = \\[','mpc.bus= \\[','mpc.bus =\\['],
+				"GeneratorData" : ['%% generator data','mpc.gen = \\[','mpc.gen= \\[','mpc.gen =\\['],
+				"GeneratorCostData" : ['%% generator cost data','mpc.gencost = \\[','mpc.gencost= \\[','mpc.gencost =\\['],
+				"BranchData" : ['%% branch data','mpc.branch = \\[','mpc.branch= \\[','mpc.branch =\\['],
 				"BusLocation" : "%% bus location",
 				"BaseMVA" : "mpc.baseMVA = "
 			},
