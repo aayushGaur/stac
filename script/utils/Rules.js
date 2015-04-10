@@ -10,7 +10,7 @@ NETWORK.RULES = {
 				"GeneratorCostData" : ['%% generator cost data','mpc.gencost = \\[','mpc.gencost= \\[','mpc.gencost =\\['],
 				"BranchData" : ['%% branch data','mpc.branch = \\[','mpc.branch= \\[','mpc.branch =\\['],
 				"BusLocation" : "%% bus location",
-				"BaseMVA" : "mpc.baseMVA = "
+				"BaseMVA" : ['mpc.baseMVA = ','mpc.baseMVA	= ']
 			},
 			EndingData: {
 				"AreaData" : "];",
@@ -90,7 +90,7 @@ NETWORK.RULES = {
 		{"key":"r", "data":"edgeData.r","units":"Resistance p.u."},
 		{"key":"x", "data":"edgeData.x","units":"Reactance p.u."},
 		{"key":"charge", "data":"edgeData.b","units":"Susceptance p.u."},
-		{"key":"Rate A", "data":"edgeData.rateA","units":"MVA"},
+		{"key":"Rate A", "data":"edgeData.rateAToolTip","units":"MVA"},
 		{"key":"Rate B", "data":"edgeData.rateB","units":"MVA"},
 		{"key":"Rate C", "data":"edgeData.rateC","units":"MVA"},
 		{"key":"Min angle difference", "data":"edgeData.angmin","units":"Degrees"},

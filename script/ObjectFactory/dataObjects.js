@@ -126,7 +126,6 @@
 			//The regular expression has been added because the new line character at the end of the line was
 			//forcing JS  to make the last property name a string and hence inaccessible from the object.
 			
-			console.log(content);
 			//The second replace statement has been added to convert all the spaces to tabs and the trim has been added to take care of all the leading and trailing spaces.
 			objProperties = (((content[rawDataObj.lineGap].replace(/(\r\n|\n|\r)/gm,"")).trim()).replace(/\s{2,}/g, '\t')).split('\t');
 		}
@@ -145,9 +144,6 @@
 				var eachObjectData = crtContent.split('\t');
 				
 				var actualDataObj = {};
-				
-				console.log(eachObjectData);
-				console.log(objProperties);
 				
 				for(var propIndexer = 1; propIndexer < objProperties.length; propIndexer++)
 				{
@@ -218,9 +214,44 @@
 	*
 	**/
 	NETWORK.ObjectFactory.prototype.addGeneratorCostData = function(dataObjects) {
+		var boolIgnoreCostData = false;
+		var boolInequalCostDataLength = false;
+		//As advised by Dr. Carleton - In some cases the matrix mpc.gencost with have two lines for each generator If that is the case, the parser should raise a warning.
+		//The following check has been added to cater to this need.
+		if(dataObjects.generatorDataObj.dataObjList.length !== dataObjects.generatorCostDataObj.dataObjList.length) {
+			boolInequalCostDataLength = true;
+		}
+		
+		//As advised by Dr. Carleton - The current implementation only supports quadratic cost functions in the mpc.gencost matrix, not PWL cost functions.
+		//When reading mpc.gencost matrix it should check that the first value of each line is "2". If not, then it should print a warning that the cost data is being ignored. Cost 1, Cost 2, and Cost 3 on //the generators should appear as something like "NA" or a dash "-".
+		//Separate loop added to avoid any regression in the code.
+		for(var i = 0; i < dataObjects.generatorCostDataObj.dataObjList.length; i++) {
+			if(dataObjects.generatorCostDataObj.dataObjList[i].GenID === "1") {
+				boolIgnoreCostData = true;
+			}
+		}
+
 		//Loop Across the Generator Cost Object to update the Generator Data object with the relevant cost info.	
 		for(var index = 0; index < dataObjects.generatorDataObj.dataObjList.length; index++) {
+			//Data is added per the value of the variables set based on the new validation logic added.
 			(dataObjects.generatorDataObj.dataObjList[index])["costData"] = (dataObjects.generatorCostDataObj.dataObjList[index]);
+			if(boolIgnoreCostData) {
+				(dataObjects.generatorDataObj.dataObjList[index]).costData["ignoreCostData"] = "true";
+				(dataObjects.generatorDataObj.dataObjList[index]).costData.cost1 = "-";
+				(dataObjects.generatorDataObj.dataObjList[index]).costData.cost2 = "-";
+				(dataObjects.generatorDataObj.dataObjList[index]).costData.cost3 = "-";
+	
+			}
+			else {
+				(dataObjects.generatorDataObj.dataObjList[index]).costData["ignoreCostData"] = "false";
+			}
+			
+			if(boolInequalCostDataLength) {
+				(dataObjects.generatorDataObj.dataObjList[index]).costData["boolInequalCostDataLength"] = "true";
+			}
+			else {
+				(dataObjects.generatorDataObj.dataObjList[index]).costData["boolInequalCostDataLength"] = "false";
+			}
 		}
 	};
 
@@ -330,6 +361,15 @@
 				var UB = Math.sqrt(Math.max(V1,V2)) * parseFloat(networkConfigObj.BaseMVA);
 				edgeDataObj["UB"]  = UB;
 			/**Region Ends**/	
+		
+
+			//Added to update the value of rateA if it is zero - As advised by Dr. Carleton		
+			if(edgeDataObj.rateA === "0") {
+				edgeDataObj["rateAToolTip"] = "none";
+			}
+			else {
+				edgeDataObj["rateAToolTip"] = edgeDataObj.rateA;
+			}
 			
 			var edge = {	
 								"index":branchIndexer+1,
@@ -348,6 +388,8 @@
 		Object.keys(edges).forEach(function(key, index) {
 			edgeData.push(this[key]);
 		}, edges);
+		
+		
 		
 		networkConfigObj.branchDataObj.dataObjList = edgeData;
 	};

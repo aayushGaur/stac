@@ -18,35 +18,60 @@
 				//This array is used to record both the errors and the warnings for the bus.
 				var validationWarning = jQuery.extend(true, [], NETWORK.RULES.topDecoToolTip);
 				
-				if(topDeco.type === "generator") {
-					if(parseFloat(data.costData.cost1) < 0.0 || (parseFloat(data.costData.cost2) < 0) || (parseFloat(data.costData.cost3) < 0)) {
-						var cost = {"key":"Cost", "data":"Cost for generator is Negative","custom":"true","type":"warning"};
-						warning = true;
-						validationWarning.push(cost);
-						warningList.push("Cost 1");
-						warningList.push("Cost 2");
-						warningList.push("Cost 3");
-						LOGGER.addWarningMessage("Cost for generator "+ data.id +"is Negative." ,data.DOMID,"topDeco");
-					}
-					if(parseFloat(data.Pmin) < 0) {
-						var pLB = {"key":"p LB", "data":"Value for P min is less than zero.","custom":"true","type":"warning"};
-						warning = true;
-						warningList.push("P Min Bounds");
-						validationWarning.push(pLB);
-						LOGGER.addWarningMessage("Value of P min is less than zero for generator "+ data.id + "." ,data.DOMID,"topDeco");
-					}
+				
+				if(data.costData.boolInequalCostDataLength === "true") {
+					var reactivePowerCost = {"key":"ReactivePowerCost", "data":"This test case has cost values on reactive power generation </br>that are not displayed by this tool.","custom":"true","type":"warning"};
+					warning = true;
+					validationWarning.push(reactivePowerCost);
+					//LOGGER.addWarningMessage("Cost for generator "+ data.id +"is Negative." ,data.DOMID,"topDeco");
 				}
-				else {
-					if(parseFloat(data.costData.cost1) !== 0.0 || (parseFloat(data.costData.cost2) !== 0) || (parseFloat(data.costData.cost3) !== 0)) {
-						var cost = {"key":"Cost", "data":"Synchronous Condenser has non zero cost(s).","custom":"true","type":"warning"};
-						warning = true;
-						warningList.push("Cost 1");
-						warningList.push("Cost 2");
-						warningList.push("Cost 3");
-						validationWarning.push(cost);
-						LOGGER.addWarningMessage("Cost for Synchronous Generator "+ data.id + " is Negative." ,data.DOMID,"topDeco");
+				
+				
+				//As advised by Dr. Carleton - The current implementation only supports quadratic cost functions in the mpc.gencost matrix, not PWL cost functions.
+				//When reading mpc.gencost matrix it should check that the first value of each line is "2". If not, then it should print a warning that the cost data is being ignored. Cost 1, Cost 2, and Cost 3 
+					if(data.costData.ignoreCostData === "false") {
+						if(topDeco.type === "generator") {
+							if(parseFloat(data.costData.cost1) < 0.0 || (parseFloat(data.costData.cost2) < 0) || (parseFloat(data.costData.cost3) < 0)) {
+								var cost = {"key":"Cost", "data":"Cost for generator is Negative","custom":"true","type":"warning"};
+								warning = true;
+								validationWarning.push(cost);
+								warningList.push("Cost 1");
+								warningList.push("Cost 2");
+								warningList.push("Cost 3");
+								LOGGER.addWarningMessage("Cost for generator "+ data.id +"is Negative." ,data.DOMID,"topDeco");
+							}						
+							if(parseFloat(data.Pmin) < 0) {
+								var pLB = {"key":"p LB", "data":"Value for P min is less than zero.","custom":"true","type":"warning"};
+								warning = true;
+								warningList.push("P Min Bounds");
+								validationWarning.push(pLB);
+								LOGGER.addWarningMessage("Value of P min is less than zero for generator "+ data.id + "." ,data.DOMID,"topDeco");
+							}
+						}
+						else {
+							if(parseFloat(data.costData.cost1) !== 0.0 || (parseFloat(data.costData.cost2) !== 0) || (parseFloat(data.costData.cost3) !== 0)) {
+								var cost = {"key":"Cost", "data":"Synchronous Condenser has non zero cost(s).","custom":"true","type":"warning"};
+								warning = true;
+								warningList.push("Cost 1");
+								warningList.push("Cost 2");
+								warningList.push("Cost 3");
+								validationWarning.push(cost);
+								LOGGER.addWarningMessage("Cost for Synchronous Generator "+ data.id + " is Negative." ,data.DOMID,"topDeco");
+							}
+						}
 					}
-				}
+					else {
+							var cost = {"key":"Cost", "data":"Cost data for generator is ignored.","custom":"true","type":"warning"};
+							warning = true;
+							validationWarning.push(cost);
+							warningList.push("Cost 1");
+							warningList.push("Cost 2");
+							warningList.push("Cost 3");
+							LOGGER.addWarningMessage("Cost for generator "+ data.id +" is ignored." ,data.DOMID,"topDeco");
+					}
+				
+				
+				
 				
 				if((parseInt(data.status) === 1) && (parseInt(crtNode.status) === 0)) {
 					var statusWarning = {"key":"Status", "data":"Status is 1 where as Status for Node is 0.","custom":"true","type":"warning"};
@@ -206,12 +231,13 @@
 				validationErrorWarning.push({"key":"Status", "data":"Negative b value on Branch.","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Negative b value on Branch - "+ data.index + " (" +(data.edgeId) + ")",data.edgeData.DOMID,"edge");	
 			}
-			if(parseFloat(data.edgeData.rateA) === 0) { 
+			//as advised by Dr. Carleton - Removed the warning if the value of rateA is 0
+			/*if(parseFloat(data.edgeData.rateA) === 0) { 
 				warning = true; 
 				warningList.push("Rate A"); 
 				validationErrorWarning.push({"key":"Status", "data":"RateA zero for Branch.","custom":"true","type":"warning"});
 				LOGGER.addWarningMessage("Value of 'RateA' is zero for Branch - "+ data.index + " (" +(data.edgeId) + ")",data.edgeData.DOMID,"edge");
-			}
+			}*/
 			
 			if(parseFloat(data.edgeData.b) !== 0) {
 				if(Math.abs(Math.log10(data.edgeData.x) - Math.log10(data.edgeData.b)) >= 1) {
