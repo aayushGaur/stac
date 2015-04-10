@@ -9,7 +9,7 @@ NETWORK.RULES = {
 				"GeneratorData" : ['%% generator data','mpc.gen = \\[','mpc.gen= \\[','mpc.gen =\\['],
 				"GeneratorCostData" : ['%% generator cost data','mpc.gencost = \\[','mpc.gencost= \\[','mpc.gencost =\\['],
 				"BranchData" : ['%% branch data','mpc.branch = \\[','mpc.branch= \\[','mpc.branch =\\['],
-				"BusLocation" : "%% bus location",
+				"BusLocation" : ['%% bus location','%% bus location'],
 				"BaseMVA" : ['mpc.baseMVA = ','mpc.baseMVA	= ']
 			},
 			EndingData: {
