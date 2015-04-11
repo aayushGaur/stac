@@ -373,6 +373,8 @@
 			}
 			else {
 				edgeDataObj["rateAToolTip"] = edgeDataObj.rateA;
+				edgeDataObj["rateBToolTip"] = edgeDataObj.rateB;
+				edgeDataObj["rateCToolTip"] = edgeDataObj.rateC;
 			}
 			
 			var edge = {	
