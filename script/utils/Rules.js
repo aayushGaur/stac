@@ -91,8 +91,8 @@ NETWORK.RULES = {
 		{"key":"x", "data":"edgeData.x","units":"Reactance p.u."},
 		{"key":"charge", "data":"edgeData.b","units":"Susceptance p.u."},
 		{"key":"Rate A", "data":"edgeData.rateAToolTip","units":"MVA"},
-		{"key":"Rate B", "data":"edgeData.rateB","units":"MVA"},
-		{"key":"Rate C", "data":"edgeData.rateC","units":"MVA"},
+		{"key":"Rate B", "data":"edgeData.rateBToolTip","units":"MVA"},
+		{"key":"Rate C", "data":"edgeData.rateCToolTip","units":"MVA"},
 		{"key":"Min angle difference", "data":"edgeData.angmin","units":"Degrees"},
 		{"key":"Max angle difference", "data":"edgeData.angmax","units":"Degrees"},
 		

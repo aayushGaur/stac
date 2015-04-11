@@ -18,13 +18,13 @@
 				//This array is used to record both the errors and the warnings for the bus.
 				var validationWarning = jQuery.extend(true, [], NETWORK.RULES.topDecoToolTip);
 				
-				
+				/*As advised by Dr. Carleton - In this case the warning is not added to the page. Only an alert (Added in the data objects) is displayed to show the message to the user.
 				if(data.costData.boolInequalCostDataLength === "true") {
 					var reactivePowerCost = {"key":"ReactivePowerCost", "data":"This test case has cost values on reactive power generation </br>that are not displayed by this tool.","custom":"true","type":"warning"};
 					warning = true;
 					validationWarning.push(reactivePowerCost);
 					//LOGGER.addWarningMessage("Cost for generator "+ data.id +"is Negative." ,data.DOMID,"topDeco");
-				}
+				}*/
 				
 				
 				//As advised by Dr. Carleton - The current implementation only supports quadratic cost functions in the mpc.gencost matrix, not PWL cost functions.
@@ -60,6 +60,7 @@
 							}
 						}
 					}
+					/*As advised by Dr. Carleton - The warning for ignoring the cost data is common for all generators and thus is only displayed only once to the user (in data objects file)
 					else {
 							var cost = {"key":"Cost", "data":"Cost data for generator is ignored.","custom":"true","type":"warning"};
 							warning = true;
@@ -68,7 +69,7 @@
 							warningList.push("Cost 2");
 							warningList.push("Cost 3");
 							LOGGER.addWarningMessage("Cost for generator "+ data.id +" is ignored." ,data.DOMID,"topDeco");
-					}
+					}*/
 				
 				
 				
@@ -247,12 +248,14 @@
 					LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - charge is very different from x.",data.edgeData.DOMID,"edge");	
 				}
 			}
-			
-			if(parseFloat(data.edgeData.rateA) > parseFloat(data.edgeData.UB)) { 
-				warning = true;
-				warningList.push("Rate A"); 
-				validationErrorWarning.push({"key":"charge", "data":"Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")","custom":"true","type":"warning"});
-				LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")",data.edgeData.DOMID,"edge");
+			//if the value of rateA is zero then the validation is to be ignored as zero value for rateA signifies a special case.
+			if(parseFloat(data.edgeData.rateA) !== 0 ) {
+				if(parseFloat(data.edgeData.rateA) > parseFloat(data.edgeData.UB)) { 
+					warning = true;
+					warningList.push("Rate A"); 
+					validationErrorWarning.push({"key":"charge", "data":"Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")","custom":"true","type":"warning"});
+					LOGGER.addWarningMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal Rating is greater than the implied Upper Bound ("+ parseFloat(data.edgeData.UB).toFixed(4) + ")",data.edgeData.DOMID,"edge");
+				}
 			}
 			
 			if((parseFloat(data.edgeData.status) === 1)  && (parseFloat(data.source.status) === 0 || parseFloat(data.target.status) === 0)) {
@@ -300,12 +303,15 @@
 				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Inconsistent KVbase values." ,data.edgeData.DOMID,"edge");
 			}
 			
-			if((Math.sqrt(parseFloat(data.solutionData["s-s-t"])) > parseFloat(data.edgeData.rateA)) || (Math.sqrt(parseFloat(data.solutionData["s-t-s"])) > parseFloat(data.edgeData.rateA))) {
-				error = true;
-				errorList.push("Apparent power forward");
-				errorList.push("Apparent power reverse");
-				validationErrorWarning.push({"key":"Error", "data":"Thermal limit and angle difference bound violated.","custom":"true","type":"error"});
-				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal limit and angle difference bound violated." ,data.edgeData.DOMID,"edge");
+			//Ignore the validation if the value of rateA is zero as this signifies a special case.
+			if(parseFloat(data.edgeData.rateA) !== 0) {
+				if((Math.sqrt(parseFloat(data.solutionData["s-s-t"])) > parseFloat(data.edgeData.rateA)) || (Math.sqrt(parseFloat(data.solutionData["s-t-s"])) > parseFloat(data.edgeData.rateA))) {
+					error = true;
+					errorList.push("Apparent power forward");
+					errorList.push("Apparent power reverse");
+					validationErrorWarning.push({"key":"Error", "data":"Thermal limit and angle difference bound violated.","custom":"true","type":"error"});
+					LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal limit and angle difference bound violated." ,data.edgeData.DOMID,"edge");
+				}
 			}
 			
 			this.edgeDataObjs.dataObjList[index]["validationError"] = validationErrorWarning;

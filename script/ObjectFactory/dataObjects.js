@@ -220,16 +220,18 @@
 		//The following check has been added to cater to this need.
 		if(dataObjects.generatorDataObj.dataObjList.length !== dataObjects.generatorCostDataObj.dataObjList.length) {
 			boolInequalCostDataLength = true;
+			alert("Warning: this test case has cost values on reactive power generation that are not displayed by this tool.");
 		}
 		
-		//As advised by Dr. Carleton - The current implementation only supports quadratic cost functions in the mpc.gencost matrix, not PWL cost functions.
-		//When reading mpc.gencost matrix it should check that the first value of each line is "2". If not, then it should print a warning that the cost data is being ignored. Cost 1, Cost 2, and Cost 3 on //the generators should appear as something like "NA" or a dash "-".
-		//Separate loop added to avoid any regression in the code.
-		for(var i = 0; i < dataObjects.generatorCostDataObj.dataObjList.length; i++) {
-			if(dataObjects.generatorCostDataObj.dataObjList[i].GenID === "1") {
-				boolIgnoreCostData = true;
-			}
+		/*As advised by Dr. Carleton - The current implementation only supports quadratic cost functions in the mpc.gencost matrix, not PWL cost functions.
+			When reading mpc.gencost matrix it should check that the first value of each line is "2". If not, then it should print a warning that the cost data is being ignored. Cost 1, Cost 2, and Cost 3 on the generators should appear as something like "NA" or a dash "-".
+			If one generator is of type 1 all of them will be of type 1, thus checking only the first one.
+			Also as this is common for all generators only one warning message is shown to the user when the file is loaded*/
+		if(dataObjects.generatorCostDataObj.dataObjList[0].GenID === "1") {
+			boolIgnoreCostData = true;
+			alert("Warning: the piecewise linear generator cost functions in this test case are not displayed by this tool.");
 		}
+		
 
 		//Loop Across the Generator Cost Object to update the Generator Data object with the relevant cost info.	
 		for(var index = 0; index < dataObjects.generatorDataObj.dataObjList.length; index++) {
@@ -366,6 +368,8 @@
 			//Added to update the value of rateA if it is zero - As advised by Dr. Carleton		
 			if(edgeDataObj.rateA === "0") {
 				edgeDataObj["rateAToolTip"] = "none";
+				edgeDataObj["rateBToolTip"] = "none";
+				edgeDataObj["rateCToolTip"] = "none";
 			}
 			else {
 				edgeDataObj["rateAToolTip"] = edgeDataObj.rateA;
