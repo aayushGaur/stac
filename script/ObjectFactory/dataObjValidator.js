@@ -319,8 +319,8 @@
 			if(parseFloat(data.edgeData.angle) < parseFloat(data.edgeData.angmin) || parseFloat(data.edgeData.angle) > parseFloat(data.edgeData.angmax)) {
 				error = true;
 				//errorList.push("Apparent power forward");
-				validationErrorWarning.push({"key":"Error", "data":"Angle difference bound violated","custom":"true","type":"error"});
-				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Angle difference bound violated" ,data.edgeData.DOMID,"edge");
+				validationErrorWarning.push({"key":"Error", "data":"Angle difference bound violated.","custom":"true","type":"error"});
+				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Angle difference bound violated." ,data.edgeData.DOMID,"edge");
 			}
 		
 			
