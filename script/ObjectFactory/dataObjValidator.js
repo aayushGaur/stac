@@ -303,16 +303,26 @@
 				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Inconsistent KVbase values." ,data.edgeData.DOMID,"edge");
 			}
 			
+			
 			//Ignore the validation if the value of rateA is zero as this signifies a special case.
+			//Also updated the error message as per feedback.
 			if(parseFloat(data.edgeData.rateA) !== 0) {
 				if((Math.sqrt(parseFloat(data.solutionData["s-s-t"])) > parseFloat(data.edgeData.rateA)) || (Math.sqrt(parseFloat(data.solutionData["s-t-s"])) > parseFloat(data.edgeData.rateA))) {
 					error = true;
 					errorList.push("Apparent power forward");
 					errorList.push("Apparent power reverse");
-					validationErrorWarning.push({"key":"Error", "data":"Thermal limit and angle difference bound violated.","custom":"true","type":"error"});
-					LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal limit and angle difference bound violated." ,data.edgeData.DOMID,"edge");
+					validationErrorWarning.push({"key":"Error", "data":"Rate A thermal limit violated.","custom":"true","type":"error"});
+					LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Rate A thermal limit violated." ,data.edgeData.DOMID,"edge");
 				}
 			}
+			
+			if(parseFloat(data.edgeData.angle) < parseFloat(data.edgeData.angmin) || parseFloat(data.edgeData.angle) > parseFloat(data.edgeData.angmax)) {
+				error = true;
+				//errorList.push("Apparent power forward");
+				validationErrorWarning.push({"key":"Error", "data":"Angle difference bound violated","custom":"true","type":"error"});
+				LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Angle difference bound violated" ,data.edgeData.DOMID,"edge");
+			}
+		
 			
 			this.edgeDataObjs.dataObjList[index]["validationError"] = validationErrorWarning;
 			this.edgeDataObjs.dataObjList[index]["error"] = error;
