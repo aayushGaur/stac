@@ -186,7 +186,7 @@ var LOGGER;
 		
 		myColaHelp.on("tick", function () {
 			nodes.tick();
-			standardEdges.tick(VIEWS.SolutionView.viewMe);
+			standardEdges.tick();
 			transformerEdges.tick();
 			lineChargeEdges.tick();
 			for(var multiIndex = 0; multiIndex<MultiLineEdges.length;multiIndex++) {

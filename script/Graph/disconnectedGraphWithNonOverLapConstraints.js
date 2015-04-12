@@ -218,8 +218,8 @@ function drawDisconnectedGraph() {
 			}
 		}
 		nodes.tick();
-		//Solution view investigative code changes.
-		standardEdges.tick(VIEWS.SolutionView.viewMe);
+		//Added a check on the count of the edges as in some test cases there are no transformer or lineCharge edges.
+		standardEdges.tick();
 		transformerEdges.tick();
 		lineChargeEdges.tick();
 		for(var multiIndex = 0; multiIndex<MultiLineEdges.length;multiIndex++) {
