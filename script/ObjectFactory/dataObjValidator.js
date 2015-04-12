@@ -307,7 +307,9 @@
 			//Ignore the validation if the value of rateA is zero as this signifies a special case.
 			//Also updated the error message as per feedback.
 			if(parseFloat(data.edgeData.rateA) !== 0) {
-				if((Math.sqrt(parseFloat(data.solutionData["s-s-t"])) > parseFloat(data.edgeData.rateA)) || (Math.sqrt(parseFloat(data.solutionData["s-t-s"])) > parseFloat(data.edgeData.rateA))) {
+				//As advised by Dr. Carleton - removed the square root on the value.
+				//if((Math.sqrt(parseFloat(data.solutionData["s-s-t"])) > parseFloat(data.edgeData.rateA)) || (Math.sqrt(parseFloat(data.solutionData["s-t-s"])) > parseFloat(data.edgeData.rateA))) {
+				if((parseFloat(data.solutionData["s-s-t"]) > parseFloat(data.edgeData.rateA)) || (parseFloat(data.solutionData["s-t-s"]) > parseFloat(data.edgeData.rateA))) {
 					error = true;
 					errorList.push("Apparent power forward");
 					errorList.push("Apparent power reverse");
@@ -316,7 +318,8 @@
 				}
 			}
 			
-			if(parseFloat(data.edgeData.angle) < parseFloat(data.edgeData.angmin) || parseFloat(data.edgeData.angle) > parseFloat(data.edgeData.angmax)) {
+			//Checking the angle difference violations.
+			if(parseFloat(data.solutionData.angleDiffVal) < parseFloat(data.edgeData.angmin) || parseFloat(data.solutionData.angleDiffVal) > parseFloat(data.edgeData.angmax)) {
 				error = true;
 				//errorList.push("Apparent power forward");
 				validationErrorWarning.push({"key":"Error", "data":"Angle difference bound violated.","custom":"true","type":"error"});

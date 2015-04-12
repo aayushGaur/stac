@@ -32,6 +32,9 @@
 		var source = this.networkObj.busDataObj.dataObjList[nodeIndexMap[edgeData.fbus]];
 		var target =  this.networkObj.busDataObj.dataObjList[nodeIndexMap[edgeData.tbus]];
 		var solData = {};
+		
+		solData["angleDiffVal"] = (parseFloat(source.Va) - parseFloat(target.Va));
+		
 		solData["angle"] = (edgeData.angle * Math.PI / 180 )
 		solData["r"] = parseFloat(edgeData.r);
 		if (parseFloat(edgeData.ratio) === 0.0) {
