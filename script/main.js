@@ -101,7 +101,7 @@ function drawGraph(event) {
 		else {
 			$("#LoadSnippet").hide();
 			$("#dropInput").html("Load Matpower case");
-			alert("The format of the Input file is not correct.");
+			alert("Unable to parse the input file.");
 		}
 	}
 	

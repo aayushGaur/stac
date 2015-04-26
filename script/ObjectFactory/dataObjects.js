@@ -86,7 +86,16 @@
 						}
 						beginLine = FILE.search(searchParamsArray[i]);
 						var endLine = FILE.indexOf(_lclObjEndIdentifiers[key],beginLine);
-						var objInfo = { "name" : name, "beginChar": beginLine, "endChar": endLine,"lineGap":lineGap }
+						
+						var isPropNamesPresent = true;
+						//Validation needs to be added for all the elements - Currently only handling for the Bus Location Data - Issue reported by Barry Rawn.
+						//The header were not found - set the 'isPropNamesPresent' variable to false so that custom handling can be done while populating the data object.
+						if(searchParamsArray[i].toString() === "mpc.buslocation = \\[") {
+							isPropNamesPresent = false;
+							lineGap = 0;
+						}
+						
+						var objInfo = { "name" : name, "beginChar": beginLine, "endChar": endLine,"lineGap":lineGap,"isPropNamesPresent":isPropNamesPresent }
 						allObjectInfo.push(objInfo);
 						
 						//break the loop as soon the data for an object is found
@@ -126,8 +135,23 @@
 			//The regular expression has been added because the new line character at the end of the line was
 			//forcing JS  to make the last property name a string and hence inaccessible from the object.
 			
-			//The second replace statement has been added to convert all the spaces to tabs and the trim has been added to take care of all the leading and trailing spaces.
-			objProperties = (((content[rawDataObj.lineGap].replace(/(\r\n|\n|\r)/gm,"")).trim()).replace(/\s{2,}/g, '\t')).split('\t');
+			
+			if(rawDataObj.isPropNamesPresent) {
+				//The second replace statement has been added to convert all the spaces to tabs and the trim has been added to take care of all the leading and trailing spaces.
+				objProperties = (((content[rawDataObj.lineGap].replace(/(\r\n|\n|\r)/gm,"")).trim()).replace(/\s{2,}/g, '\t')).split('\t');
+			}
+			//The comments before the element contain the property names but if they are missing then property names have to fetched from rules.
+			//Currently the handling has only been done for bus location data.
+			else {
+				//Checking if the name of the object is buslocation data - custom headers for other objects to be added in the future updates.
+				if(rawDataObj.name === "BusLocation"){
+					objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BusLocation;
+					//As the content directly starts the valStartIndex is set to 1.
+					valStartIndex = 1;
+				}
+			}
+			
+			
 		}
 		
 		//content.length-1 has been taken because the index starts from 0 whereas the length is calculated from 1.
@@ -216,42 +240,61 @@
 	NETWORK.ObjectFactory.prototype.addGeneratorCostData = function(dataObjects) {
 		var boolIgnoreCostData = false;
 		var boolInequalCostDataLength = false;
-		//As advised by Dr. Carleton - In some cases the matrix mpc.gencost with have two lines for each generator If that is the case, the parser should raise a warning.
-		//The following check has been added to cater to this need.
-		if(dataObjects.generatorDataObj.dataObjList.length !== dataObjects.generatorCostDataObj.dataObjList.length) {
-			boolInequalCostDataLength = true;
-			alert("Warning: this test case has cost values on reactive power generation that are not displayed by this tool.");
-		}
 		
-		/*As advised by Dr. Carleton - The current implementation only supports quadratic cost functions in the mpc.gencost matrix, not PWL cost functions.
-			When reading mpc.gencost matrix it should check that the first value of each line is "2". If not, then it should print a warning that the cost data is being ignored. Cost 1, Cost 2, and Cost 3 on the generators should appear as something like "NA" or a dash "-".
-			If one generator is of type 1 all of them will be of type 1, thus checking only the first one.
-			Also as this is common for all generators only one warning message is shown to the user when the file is loaded*/
-		if(dataObjects.generatorCostDataObj.dataObjList[0].GenID === "1") {
-			boolIgnoreCostData = true;
-			alert("Warning: the piecewise linear generator cost functions in this test case are not displayed by this tool.");
-		}
-		
+		//Ignore the Generator cost if it is not present in the file.
+		if(typeof dataObjects.generatorCostDataObj !== 'undefined') {
+			//As advised by Dr. Carleton - In some cases the matrix mpc.gencost with have two lines for each generator If that is the case, the parser should raise a warning.
+			//The following check has been added to cater to this need.
+			if(dataObjects.generatorDataObj.dataObjList.length !== dataObjects.generatorCostDataObj.dataObjList.length) {
+				boolInequalCostDataLength = true;
+				alert("Warning: this test case has cost values on reactive power generation that are not displayed by this tool.");
+			}
+			
+			/*As advised by Dr. Carleton - The current implementation only supports quadratic cost functions in the mpc.gencost matrix, not PWL cost functions.
+				When reading mpc.gencost matrix it should check that the first value of each line is "2". If not, then it should print a warning that the cost data is being ignored. Cost 1, Cost 2, and Cost 3 on the generators should appear as something like "NA" or a dash "-".
+				If one generator is of type 1 all of them will be of type 1, thus checking only the first one.
+				Also as this is common for all generators only one warning message is shown to the user when the file is loaded*/
+			if(dataObjects.generatorCostDataObj.dataObjList[0].GenID === "1") {
+				boolIgnoreCostData = true;
+				alert("Warning: the piecewise linear generator cost functions in this test case are not displayed by this tool.");
+			}
+			
 
-		//Loop Across the Generator Cost Object to update the Generator Data object with the relevant cost info.	
-		for(var index = 0; index < dataObjects.generatorDataObj.dataObjList.length; index++) {
-			//Data is added per the value of the variables set based on the new validation logic added.
-			(dataObjects.generatorDataObj.dataObjList[index])["costData"] = (dataObjects.generatorCostDataObj.dataObjList[index]);
-			if(boolIgnoreCostData) {
+			//Loop Across the Generator Cost Object to update the Generator Data object with the relevant cost info.	
+			for(var index = 0; index < dataObjects.generatorDataObj.dataObjList.length; index++) {
+				//Data is added per the value of the variables set based on the new validation logic added.
+				(dataObjects.generatorDataObj.dataObjList[index])["costData"] = (dataObjects.generatorCostDataObj.dataObjList[index]);
+				if(boolIgnoreCostData) {
+					(dataObjects.generatorDataObj.dataObjList[index]).costData["ignoreCostData"] = "true";
+					(dataObjects.generatorDataObj.dataObjList[index]).costData.cost1 = "-";
+					(dataObjects.generatorDataObj.dataObjList[index]).costData.cost2 = "-";
+					(dataObjects.generatorDataObj.dataObjList[index]).costData.cost3 = "-";
+		
+				}
+				else {
+					(dataObjects.generatorDataObj.dataObjList[index]).costData["ignoreCostData"] = "false";
+				}
+				
+				if(boolInequalCostDataLength) {
+					(dataObjects.generatorDataObj.dataObjList[index]).costData["boolInequalCostDataLength"] = "true";
+				}
+				else {
+					(dataObjects.generatorDataObj.dataObjList[index]).costData["boolInequalCostDataLength"] = "false";
+				}
+			}
+		}
+		else 
+		{
+			boolIgnoreCostData = true;
+			boolInequalCostDataLength = true;
+			//Loop Across the Generator Cost Object to update the Generator Data object so that all the ignoring variables are set to true - to avoid crash in validation or tool-tip.
+			for(var index = 0; index < dataObjects.generatorDataObj.dataObjList.length; index++) {
+				//Data is added per the value of the variables set based on the new validation logic added.
+				(dataObjects.generatorDataObj.dataObjList[index])["costData"] = [];
 				(dataObjects.generatorDataObj.dataObjList[index]).costData["ignoreCostData"] = "true";
 				(dataObjects.generatorDataObj.dataObjList[index]).costData.cost1 = "-";
 				(dataObjects.generatorDataObj.dataObjList[index]).costData.cost2 = "-";
 				(dataObjects.generatorDataObj.dataObjList[index]).costData.cost3 = "-";
-	
-			}
-			else {
-				(dataObjects.generatorDataObj.dataObjList[index]).costData["ignoreCostData"] = "false";
-			}
-			
-			if(boolInequalCostDataLength) {
-				(dataObjects.generatorDataObj.dataObjList[index]).costData["boolInequalCostDataLength"] = "true";
-			}
-			else {
 				(dataObjects.generatorDataObj.dataObjList[index]).costData["boolInequalCostDataLength"] = "false";
 			}
 		}

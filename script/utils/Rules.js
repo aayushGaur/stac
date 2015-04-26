@@ -9,7 +9,7 @@ NETWORK.RULES = {
 				"GeneratorData" : ['%% generator data','mpc.gen = \\[','mpc.gen= \\[','mpc.gen =\\['],
 				"GeneratorCostData" : ['%% generator cost data','mpc.gencost = \\[','mpc.gencost= \\[','mpc.gencost =\\['],
 				"BranchData" : ['%% branch data','mpc.branch = \\[','mpc.branch= \\[','mpc.branch =\\['],
-				"BusLocation" : ['%% bus location','%% bus location'],
+				"BusLocation" : ['%% bus location','%% bus location','mpc.buslocation = \\['],
 				"BaseMVA" : ['mpc.baseMVA = ','mpc.baseMVA	= ']
 			},
 			EndingData: {
@@ -21,7 +21,11 @@ NETWORK.RULES = {
 				"BusLocation" : "];",
 				"BaseMVA" : ";"
 			}
-		}
+		},
+		HardCodedDefaultProperties: {
+			/*Similar to bus location data updates also need to be made for other elements. The property count starts at 1 thus the first element needs to be dummy for all the cases*/
+			"BusLocation" : ['LocData','bus_i','x','y']
+		},
 	},
 
 /*Tool-tip data - Features that the tool-tip supports i.e. by only giving the JSON input using these tricks will add different functionalities in the tool-tip data.
