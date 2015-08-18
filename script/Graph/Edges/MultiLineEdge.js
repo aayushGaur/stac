@@ -15,13 +15,13 @@
 					.attr("class", "edgeConnector"); 
 			
 			this.standardEdgesData = $.grep(edgesData, function(edgeData) {
-				return (edgeData.edgeType === "Standard" && edgeData.isMultiLine ===true);
+				return (edgeData.edgeType === "Standard" && edgeData.isMultiLine === true);
 			});
 			this.transformerEdgesData = $.grep(edgesData, function(edgeData) {
-				return (edgeData.edgeType === "Transformer" && edgeData.isMultiLine ===true);;
+				return (edgeData.edgeType === "Transformer" && edgeData.isMultiLine === true);;
 			});
 			this.lineChargeEdgesData = $.grep(edgesData, function(edgeData) {
-				return (edgeData.edgeType === "LineCharge" && edgeData.isMultiLine ===true);; 
+				return (edgeData.edgeType === "LineCharge" && edgeData.isMultiLine === true);; 
 			});
 			
 			this.standardEdges = new NETWORK.GRAPH.StandardEdges(svg,this.standardEdgesData);
@@ -37,13 +37,22 @@
 	
 	NETWORK.GRAPH.MultiLineEdges.prototype.tick = function(){
 		var Obj = this;
-		this.standardEdges.edges.each(function(d){ Obj.moveEdges(this); });
-		this.transformerEdges.edges.each(function(d){  Obj.moveEdges(this); });
-		this.lineChargeEdges.edges.each(function(d){ Obj.moveEdges(this); });
 		
-		this.standardEdges.moveDecorator();
-		this.transformerEdges.moveDecorator();
-		this.lineChargeEdges.moveDecorator();
+		if(this.standardEdges.edges[0].length !== 0) {
+			this.standardEdges.edges.each(function(d){ Obj.moveEdges(this); });
+			this.standardEdges.moveDecorator();
+		}
+		
+		if(this.transformerEdges.edges[0].length !== 0) {
+			this.transformerEdges.edges.each(function(d){  Obj.moveEdges(this); });
+			this.transformerEdges.moveDecorator();
+		}
+		
+		if(this.lineChargeEdges.edges[0].length){
+			this.lineChargeEdges.edges.each(function(d){ Obj.moveEdges(this); });
+			this.lineChargeEdges.moveDecorator();
+		}
+		
 		this.moveDecorator();
 	};
 	

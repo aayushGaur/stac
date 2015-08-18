@@ -68,9 +68,10 @@ function drawDisconnectedGraph() {
 			return 0;
 		}
 	);
-
+	
 	for(var edgeIndex = 0; edgeIndex <edgesData.length; edgeIndex++) {
 		var crtEdge = edgesData[edgeIndex];
+		
 		if(crtEdge.edgeType === "Standard" && !crtEdge.isMultiLine) {
 			standardEdgesData.push(crtEdge);
 		}
@@ -81,15 +82,15 @@ function drawDisconnectedGraph() {
 			lineChargeEdgesData.push(crtEdge);
 		}
 		else if (crtEdge.isMultiLine) {	
-			if(multiEdgeName==="") {
+			if(multiEdgeName !== crtEdge.edgeName.slice(0,-2)) {
+				edgeCouple=[];
 				multiEdgeName = crtEdge.edgeName.slice(0,-2);
 				edgeCouple.push(crtEdge);
 			}
 			else if (multiEdgeName === crtEdge.edgeName.slice(0,-2)){
 				edgeCouple.push(crtEdge);
-				multiEdgeName = "";
+				multiEdgeName = crtEdge.edgeName.slice(0,-2);
 				MultiLineEdgesData.push(edgeCouple);
-				edgeCouple=[];
 			}
 		}
 	}
