@@ -3,7 +3,7 @@
 ## Motivation behind stac
 Power Networks are large complex systems often spanning over 100 buses at a time.Understanding, Interpreting and Visualizing them is a challenging and tedious process. The STAC project looks to make that process easier through a visualization tool for power networks. <br>
 
-stac is a web-based tool that is aimed at helping the power system researchers in understanding their network datasets and the results of their research.
+stac is a web-based tool that is aimed at helping power system researchers to understand their network datasets and the results of their research.
 
 ## Key features of stac
 1.  ** *Automatic graph layout* ** - All you need to do is drop in the input file and stac gives you an automated layout of the network (including the generators, synchronous condensers, loads, shunts and different branches).
