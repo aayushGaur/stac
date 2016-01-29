@@ -118,40 +118,44 @@
 		var dataObjList = [];
 		dataObjectWrapper.dataObjList = dataObjList;
 		var content = this.getObjectContent(rawDataObj);
-		var contentIndex, valStartIndex, objProperties ;
+		var valStartIndex = 4, objProperties ;
+		
 		
 		//Special handling for the cost object....find a way to integrate this with other objects....19/01/2015.
-		if(rawDataObj.name === "GeneratorCostData") {
-			contentIndex = 2;
-			valStartIndex = 4;
-			if(content[2].toString().replace(/(\r\n|\n|\r)/gm,"") === "mpc.gencost = [") {
-				valStartIndex = 3;
-			}
-			objProperties = ["%", "GenID", "startup", "shutdown", "n", "cost1", "cost2", "cost3"];
+		
+		//Making the approach generic to handle the parsing for all the data objects without heading.
+		switch(rawDataObj.name)
+		{
+			case 'AreaData':
+				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.AreaData;
+			break;	
+			case 'BusData':
+				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BusData;
+			break;
+			case 'GeneratorData':
+				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.GeneratorData;
+			break;
+			case 'GeneratorCostData':
+				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.GeneratorCostData;
+			break;
+			case 'BranchData':
+				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BranchData;
+			break;
+			case 'BusLocation':
+				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BusLocation;
+			break;
+			default:
+			break;
 		}
-		else {
-			contentIndex = 1;
-			valStartIndex = 3;
-			//The regular expression has been added because the new line character at the end of the line was
-			//forcing JS  to make the last property name a string and hence inaccessible from the object.
-			
-			
-			if(rawDataObj.isPropNamesPresent) {
-				//The second replace statement has been added to convert all the spaces to tabs and the trim has been added to take care of all the leading and trailing spaces.
-				objProperties = (((content[rawDataObj.lineGap].replace(/(\r\n|\n|\r)/gm,"")).trim()).replace(/\s{2,}/g, '\t')).split('\t');
+		//Dynamically finding the starting point of the data.
+		for(var i = 0; i < content.length; i++) {
+			var startIndexCheck = content[i].toString().replace(/(\r\n|\n|\r)/gm,"");
+			//The value indexer needs to be set based on the beginning of the data matrix.
+			if(startIndexCheck === "mpc.gencost = [" || startIndexCheck === "mpc.bus = [" || startIndexCheck === "mpc.buslocation = ["
+			|| startIndexCheck === "mpc.gen = [" || startIndexCheck === "mpc.branch = [" ||  startIndexCheck === "mpc.area = [") {
+				valStartIndex = ++i;
+				break;
 			}
-			//The comments before the element contain the property names but if they are missing then property names have to fetched from rules.
-			//Currently the handling has only been done for bus location data.
-			else {
-				//Checking if the name of the object is buslocation data - custom headers for other objects to be added in the future updates.
-				if(rawDataObj.name === "BusLocation"){
-					objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BusLocation;
-					//As the content directly starts the valStartIndex is set to 1.
-					valStartIndex = 1;
-				}
-			}
-			
-			
 		}
 		
 		//content.length-1 has been taken because the index starts from 0 whereas the length is calculated from 1.
@@ -163,8 +167,8 @@
 			
 			//Updated the condition for the content parsing to include the check for the '%' in the line.
 			//At present the location of the '%' is not relevant to the check as the symbol can be at any place in the beginning of the line.
-			if((crtContent !== "") && (crtContent.indexOf("%") === -1)) {
-				
+			//if((crtContent !== "") && (crtContent.indexOf("%") === -1)) {
+			if((crtContent !== "")) {
 				if(crtContent.indexOf(' ') !== -1)	{
 					crtContent = crtContent.replace(/\s{1,}/g, '\t');
 				}
@@ -172,9 +176,9 @@
 				
 				var actualDataObj = {};
 				
-				for(var propIndexer = 1; propIndexer < objProperties.length; propIndexer++)
+				for(var propIndexer = 0; propIndexer < objProperties.length; propIndexer++)
 				{
-					actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer-1]).toString());
+					actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer]).toString());
 				}
 				dataObjectWrapper.dataObjList.push(actualDataObj);
 			}		

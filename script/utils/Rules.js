@@ -24,7 +24,24 @@ NETWORK.RULES = {
 		},
 		HardCodedDefaultProperties: {
 			/*Similar to bus location data updates also need to be made for other elements. The property count starts at 1 thus the first element needs to be dummy for all the cases*/
-			"BusLocation" : ['LocData','bus_i','x','y']
+			"BusLocation" : ['bus_i','x','y'],
+			"AreaData" : ['AreaData'],
+			"BusData" : ["bus_i","type","Pd","Qd","Gs","Bs","area","Vm","Va","baseKV","zone","Vmax","Vmin"],
+			"GeneratorData" : ["bus","Pg","Qg","Qmax","Qmin","Vg","mBase","status","Pmax","Pmin","Pc1","Pc2","Qc1min","Qc1max","Qc2min","Qc2max","ramp_agc","ramp_10","ramp_30","ramp_q","apf"],
+			"GeneratorCostData" : ["GenID", "startup", "shutdown", "n", "cost1", "cost2", "cost3"],
+			"BranchData" : ["fbus","tbus","r","x","b","rateA","rateB","rateC","ratio","angle","status","angmin","angmax"]			
+		},
+	},
+	dataHeaders : {
+		// The structure of the Beginning Data has been upated 
+		BeginningData: {
+			"AreaData" : ['%% area data','mpc.areas = \\[','mpc.areas= \\[','mpc.areas= \\['],
+			"BusData" : ['%% bus data','mpc.bus = \\[','mpc.bus= \\[','mpc.bus =\\['],
+			"GeneratorData" : ['%% generator data','mpc.gen = \\[','mpc.gen= \\[','mpc.gen =\\['],
+			"GeneratorCostData" : ['%% generator cost data','mpc.gencost = \\[','mpc.gencost= \\[','mpc.gencost =\\['],
+			"BranchData" : ['%% branch data','mpc.branch = \\[','mpc.branch= \\[','mpc.branch =\\['],
+			"BusLocation" : ['%% bus location','%% bus location','mpc.buslocation = \\['],
+			"BaseMVA" : ['mpc.baseMVA = ','mpc.baseMVA	= ']
 		},
 	},
 
