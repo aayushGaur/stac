@@ -136,6 +136,8 @@ NETWORK.RULES = {
 		"data":"solutionData.s-s-t","units":"MVA","nature":"dynamic"},
 		{"key":"Apparent power reverse",
 		"data":"solutionData.s-t-s","units":"MVA","nature":"dynamic"},
+		/*Issue 10 - Added the angle difference value to the tool tip.*/
+		{"key":"Angle Difference","data":"solutionData.angleDiffVal","units":"Degrees","nature":"dynamic"},
 	],
 	
 	transformerEdgeToolTipExtra : [

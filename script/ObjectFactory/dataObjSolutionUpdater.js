@@ -33,7 +33,8 @@
 		var target =  this.networkObj.busDataObj.dataObjList[nodeIndexMap[edgeData.tbus]];
 		var solData = {};
 		
-		solData["angleDiffVal"] = (parseFloat(source.Va) - parseFloat(target.Va));
+		//Updated to round off the value after decimal to 4 digits.
+		solData["angleDiffVal"] = parseFloat(parseFloat(source.Va) - parseFloat(target.Va)).toFixed(4);
 		
 		solData["angle"] = (edgeData.angle * Math.PI / 180 )
 		solData["r"] = parseFloat(edgeData.r);
