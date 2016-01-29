@@ -293,6 +293,27 @@
 					LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Thermal Limit is Negative." ,data.edgeData.DOMID,"edge");
 				}
 			}
+			//Added a check on rateB and rateC - issue 9.
+			if(parseFloat(data.edgeData.rateB) < 0)  { 
+				//Added an additional check for Issue 11 - separate If condition as this might be modified.....29/01/2016
+				if((((data.edgeData.angmax - data.edgeData.angmin) * Math.PI)/180) > 
+					(2 * Math.max(Math.abs(data.source.Vmax - data.target.Vmin), Math.abs(data.source.Vmin - data.target.Vmax)))) {					
+					error = true; 
+					errorList.push("Rate B");
+					validationErrorWarning.push({"key":"Error", "data":"Rate B (Thermal Limit) is Negative.","custom":"true","type":"error"});
+					LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Rate B (Thermal Limit) is Negative." ,data.edgeData.DOMID,"edge");
+				}
+			}
+			if(parseFloat(data.edgeData.rateC) < 0)  { 
+				//Added an additional check for Issue 11 - separate If condition as this might be modified.....29/01/2016
+				if((((data.edgeData.angmax - data.edgeData.angmin) * Math.PI)/180) > 
+					(2 * Math.max(Math.abs(data.source.Vmax - data.target.Vmin), Math.abs(data.source.Vmin - data.target.Vmax)))) {					
+					error = true; 
+					errorList.push("Rate C");
+					validationErrorWarning.push({"key":"Error", "data":"Rate C (Thermal Limit) is Negative.","custom":"true","type":"error"});
+					LOGGER.addErrorMessage("Branch - "+ data.index + " (" +(data.edgeId) + ")" + " - Rate C (Thermal Limit) is Negative." ,data.edgeData.DOMID,"edge");
+				}
+			}
 			if(parseFloat(data.edgeData.angmin) > parseFloat(data.edgeData.angmax)) {
 				error = true;
 				errorList.push("Min angle difference");
