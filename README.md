@@ -24,9 +24,10 @@ stac is a web-based tool that is aimed at helping power system researchers to un
 ### Partial fixed positions in the graph (Completed)
 - Double click a node to fix it's position in the graph (The fill color will turn light blue).
 - Double click a node (with fill color blue) to unfix it's position.
+
 ### File Parser
-Added support for linear generator cost function.
-Added support for comments in the data matrix (by using the '%' symbol).
+- Added support for linear generator cost function.
+- Added support for comments in the data matrix (by using the '%' symbol).
 
 ### Updates be done
 1. Update the read me page with details of various decorators and validation view.
