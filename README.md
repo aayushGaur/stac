@@ -26,14 +26,16 @@ Double click a node to fix it's position in the graph (The fill color will turn 
 Double click a node (wiht fill color blue) to unfix it's position.
 
 ### Updates be done
-1 Update the read me page with details of various decorators and validation view.
+1. Update the read me page with details of various decorators and validation view.
 2. Drilling down into specific line flow data
 3. Automated testing (to avoid any regression in the functionality when updates/changes are made).
 
 ### Completed Updates
-#### Partial fixed positions in the graph
-#### Complete documentation, add detailed in-line and method comments.
+##### Partial fixed positions in the graph
+##### Complete documentation, add detailed in-line and method comments.
 Updated the the inline comments and method level comments.
-#### File Parser
-#### Updated logger
+##### File Parser
+Added support for linear generator cost function.
+Added support for comments in the data matrix (by using the '%' symbol).
+##### Updated logger
 Updated the logger (this was done a while ago) - As not many users have inquired about the logger no major changes have been made.
