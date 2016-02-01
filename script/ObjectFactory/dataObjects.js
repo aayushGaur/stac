@@ -167,8 +167,7 @@
 			
 			//Updated the condition for the content parsing to include the check for the '%' in the line.
 			//At present the location of the '%' is not relevant to the check as the symbol can be at any place in the beginning of the line.
-			//if((crtContent !== "") && (crtContent.indexOf("%") === -1)) {
-			if((crtContent !== "")) {
+			if((crtContent !== "") && (crtContent.indexOf("%") !== 0)) {
 				if(crtContent.indexOf(' ') !== -1)	{
 					crtContent = crtContent.replace(/\s{1,}/g, '\t');
 				}
