@@ -109,7 +109,7 @@
 	};
 		
 	/** 
-	* Generated the useful Data Objects for the Network.
+	* Generates the useful Data Objects for the Network. All the data objects except the Generator cost data object are parsed using this function.
 	* @param	rawDataObj		The raw data object which is created by parsing the text file based on the specific set of rules.
 	* @return		The actual (useful) data object for the network simulation.
 	**/
@@ -118,70 +118,48 @@
 		var dataObjList = [];
 		dataObjectWrapper.dataObjList = dataObjList;
 		var content = this.getObjectContent(rawDataObj);
-		var valStartIndex = 4, objProperties ;
+		var objProperties, i, s, crtContent, propIndexer, actualDataObj, eachObjectData, valIndexer, valStartIndex;
+		var o = NETWORK.RULES.parser.startIndexIdentifire;
+		//The object name is used to identify the name of the properties.
+		objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties[rawDataObj.name];
 		
-		
-		//Special handling for the cost object....find a way to integrate this with other objects....19/01/2015.
-		
-		//Making the approach generic to handle the parsing for all the data objects without heading.
-		switch(rawDataObj.name)
-		{
-			case 'AreaData':
-				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.AreaData;
-			break;	
-			case 'BusData':
-				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BusData;
-			break;
-			case 'GeneratorData':
-				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.GeneratorData;
-			break;
-			case 'GeneratorCostData':
-				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.GeneratorCostData;
-			break;
-			case 'BranchData':
-				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BranchData;
-			break;
-			case 'BusLocation':
-				objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties.BusLocation;
-			break;
-			default:
-			break;
-		}
-		//Dynamically finding the starting point of the data.
-		for(var i = 0; i < content.length; i++) {
-			var startIndexCheck = content[i].toString().replace(/(\r\n|\n|\r)/gm,"");
-			//The value indexer needs to be set based on the beginning of the data matrix.
-			if(startIndexCheck === "mpc.gencost = [" || startIndexCheck === "mpc.bus = [" || startIndexCheck === "mpc.buslocation = ["
-			|| startIndexCheck === "mpc.gen = [" || startIndexCheck === "mpc.branch = [" ||  startIndexCheck === "mpc.area = [") {
+		//Dynamically finding the starting point of the data and then  parsing the data object from there on.
+		for(i = 0; i < content.length; i++) {
+			s = content[i].toString().replace(/(\r\n|\n|\r)/gm,"");
+			if(o.indexOf(s.substring(0, s.indexOf("[") + 1)) !== -1) {
 				valStartIndex = ++i;
+				//content.length-1 has been taken because the index starts from 0 whereas the length is calculated from 1.
+				for(valIndexer = valStartIndex; valIndexer < (content.length-1); valIndexer++)
+				{
+					crtContent = $.trim(content[valIndexer]);
+					
+					//Updated the condition for the content parsing to include the check for the '%' in the line. The parsing is done only if the first element in the line is not %.
+					if((crtContent !== "") && (crtContent.indexOf("%") !== 0)) {
+						if(crtContent.indexOf(' ') !== -1)	{
+							crtContent = crtContent.replace(/\s{1,}/g, '\t');
+						}
+						eachObjectData = crtContent.split('\t');
+						
+						actualDataObj = {};
+						
+						//Special Handling for the generator cost data object.
+						if(rawDataObj.name === "GeneratorCostData") {
+							if(parseInt(eachObjectData[3]) === 2) {
+								//The object name is used to identify the name of the properties.
+								objProperties = NETWORK.RULES.parser.HardCodedDefaultProperties["GeneratorCostDataLinear"];
+							}
+						}
+						
+						for(propIndexer = 0; propIndexer < objProperties.length; propIndexer++)
+						{
+							actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer]).toString());
+						}
+						dataObjectWrapper.dataObjList.push(actualDataObj);
+					}		
+				}
 				break;
 			}
-		}
-		
-		//content.length-1 has been taken because the index starts from 0 whereas the length is calculated from 1.
-		for(var valIndexer = valStartIndex; valIndexer < (content.length-1); valIndexer++)
-		{
-			var crtContent = content[valIndexer];
-			//Updated the code to replace all the spaces by tab and then do the parsing.
-			crtContent = $.trim(crtContent);
-			
-			//Updated the condition for the content parsing to include the check for the '%' in the line.
-			//At present the location of the '%' is not relevant to the check as the symbol can be at any place in the beginning of the line.
-			if((crtContent !== "") && (crtContent.indexOf("%") !== 0)) {
-				if(crtContent.indexOf(' ') !== -1)	{
-					crtContent = crtContent.replace(/\s{1,}/g, '\t');
-				}
-				var eachObjectData = crtContent.split('\t');
-				
-				var actualDataObj = {};
-				
-				for(var propIndexer = 0; propIndexer < objProperties.length; propIndexer++)
-				{
-					actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer]).toString());
-				}
-				dataObjectWrapper.dataObjList.push(actualDataObj);
-			}		
-		}
+		}		
 		return dataObjectWrapper;
 	};
 	
@@ -260,10 +238,10 @@
 				When reading mpc.gencost matrix it should check that the first value of each line is "2". If not, then it should print a warning that the cost data is being ignored. Cost 1, Cost 2, and Cost 3 on the generators should appear as something like "NA" or a dash "-".
 				If one generator is of type 1 all of them will be of type 1, thus checking only the first one.
 				Also as this is common for all generators only one warning message is shown to the user when the file is loaded*/
-			if(dataObjects.generatorCostDataObj.dataObjList[0].GenID === "1") {
-				boolIgnoreCostData = true;
-				alert("Warning: the piecewise linear generator cost functions in this test case are not displayed by this tool.");
-			}
+				if(dataObjects.generatorCostDataObj.dataObjList[0].GenID === "1") {
+					boolIgnoreCostData = true;
+					alert("Warning: the piecewise linear generator cost functions in this test case are not displayed by this tool.");
+				}
 			
 
 			//Loop Across the Generator Cost Object to update the Generator Data object with the relevant cost info.	

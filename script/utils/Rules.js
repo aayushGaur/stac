@@ -22,6 +22,10 @@ NETWORK.RULES = {
 				"BaseMVA" : ";"
 			}
 		},
+		//The following array is used to get the starting index of the content for data object.
+		startIndexIdentifire : [
+		'mpc.areas = [','mpc.areas= [','mpc.areas= [','mpc.bus = [','mpc.bus= [','mpc.bus =[','mpc.gen = [','mpc.gen= [','mpc.gen =[','mpc.gencost = [','mpc.gencost= [','mpc.gencost =[','mpc.branch = [','mpc.branch= [','mpc.branch =[','mpc.buslocation = ['
+		],
 		HardCodedDefaultProperties: {
 			/*Similar to bus location data updates also need to be made for other elements. The property count starts at 1 thus the first element needs to be dummy for all the cases*/
 			"BusLocation" : ['bus_i','x','y'],
@@ -29,6 +33,7 @@ NETWORK.RULES = {
 			"BusData" : ["bus_i","type","Pd","Qd","Gs","Bs","area","Vm","Va","baseKV","zone","Vmax","Vmin"],
 			"GeneratorData" : ["bus","Pg","Qg","Qmax","Qmin","Vg","mBase","status","Pmax","Pmin","Pc1","Pc2","Qc1min","Qc1max","Qc2min","Qc2max","ramp_agc","ramp_10","ramp_30","ramp_q","apf"],
 			"GeneratorCostData" : ["GenID", "startup", "shutdown", "n", "cost1", "cost2", "cost3"],
+			"GeneratorCostDataLinear" : ["GenID", "startup", "shutdown", "n", "cost2", "cost3"],
 			"BranchData" : ["fbus","tbus","r","x","b","rateA","rateB","rateC","ratio","angle","status","angmin","angmax"]			
 		},
 	},
