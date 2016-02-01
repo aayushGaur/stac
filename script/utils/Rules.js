@@ -7,7 +7,7 @@ NETWORK.RULES = {
 				"AreaData" : ['%% area data','mpc.areas = \\[','mpc.areas= \\[','mpc.areas= \\['],
 				"BusData" : ['%% bus data','mpc.bus = \\[','mpc.bus= \\[','mpc.bus =\\['],
 				"GeneratorData" : ['%% generator data','mpc.gen = \\[','mpc.gen= \\[','mpc.gen =\\['],
-				"GeneratorCostData" : ['%% generator cost data','mpc.gencost = \\[','mpc.gencost= \\[','mpc.gencost =\\['],
+				"GeneratorCostData" : ['mpc.gencost = \\[','mpc.gencost= \\[','mpc.gencost =\\['],
 				"BranchData" : ['%% branch data','mpc.branch = \\[','mpc.branch= \\[','mpc.branch =\\['],
 				"BusLocation" : ['%% bus location','%% bus location','mpc.buslocation = \\['],
 				"BaseMVA" : ['mpc.baseMVA = ','mpc.baseMVA	= ']
