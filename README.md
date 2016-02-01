@@ -21,13 +21,19 @@ stac is a web-based tool that is aimed at helping power system researchers to un
 
 ## Upgrades/Updates
 
-### Immediate Updates (self notes)
-* Complete documentation, add detailed in-line and method comments.
-* Update the read me page with details of various decorators and validation view.
-* Make the file parser robust so that it can even withstand Destructive testing.
+### Partial fixed positions in the graph (Completed)
+Double click a node to fix it's position in the graph (The fill color will turn light blue).
+Double click a node (wiht fill color blue) to unfix it's position.
 
+### Updates be done
+1 Update the read me page with details of various decorators and validation view.
+2. Drilling down into specific line flow data
+3. Automated testing (to avoid any regression in the functionality when updates/changes are made).
 
-### Updates targeted for version 2.0.0
-1. Drilling down into specific line flow data
-2. Automated testing (to avoid any regression in the functionality when updates/changes are made).
-3. Analyse and add custom logging requirements.
+### Completed Updates
+#### Partial fixed positions in the graph
+#### Complete documentation, add detailed in-line and method comments.
+Updated the the inline comments and method level comments.
+#### File Parser
+#### Updated logger
+Updated the logger (this was done a while ago) - As not many users have inquired about the logger no major changes have been made.
