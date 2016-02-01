@@ -7,15 +7,27 @@
 	NETWORK.GRAPH.Nodes = function(data,svg, cola){
 		this.data = data;
 		this.svg = svg;
-		this.nodesGroupTag = this.svg.selectAll(".busGroupIcon").data(data).enter().append("g").attr({"fill": "white","nodeType":function (d) { return d.nodeType; }})
-													.on("mousedown", function () { VIEWS.SharedFunctionality.nodeMouseDown = true; }) // recording the mousedown state allows us to differentiate dragging from panning
-													.on("mouseup", function () { VIEWS.SharedFunctionality.nodeMouseDown = false; })
-													//.on("dblclick", function (d) {
-													//	d.fixed |= 16;
-													//	d3.select(this).selectAll(".node").attr({"style": "fill:red"});
-													//})
-													.call(cola.drag);
-													
+		this.nodesGroupTag = this.svg.selectAll(".busGroupIcon").data(data).enter().append("g")
+						.attr({"fill": "white","nodeType":function (d) { return d.nodeType; }})
+						.on("mousedown", function () { VIEWS.SharedFunctionality.nodeMouseDown = true; }) 
+						// recording the mousedown state allows us to differentiate dragging from panning
+						.on("mouseup", function () { VIEWS.SharedFunctionality.nodeMouseDown = false; })
+						//Allowing the double click action to fix the position for the node.
+						//Double clicking the node again will allow the node to move freely again.
+						.on("dblclick", function (d) {
+							if(d.isPinned === undefined || d.isPinned === false) {
+								d.fixed |= 16;
+								d.isPinned = true;
+								d3.select(this).selectAll(".node").attr({"style": "fill:lightblue"});
+							}
+							else {
+								d.fixed &= ~16;
+								d.isPinned = false;
+								d3.select(this).selectAll(".node").attr({"style": "fill:white"});
+							}
+						})
+						.call(cola.drag);
+							
 		
 		this.labels = this.getNodeLabels(cola);
 		
@@ -32,32 +44,47 @@
 		 return (this.svg.selectAll(".label").data(this.data).enter().append("text").attr("class", "label nodeLabel")
 			.classed("OffStatus", function(d) { if(parseInt(d.status) === 0) { return true; }	})
 			.text(function (d) { return d.bus_i; })
+			//Allowing the double click action to fix the position for the node.
+			//Double clicking the node again will allow the node to move freely again.
+			.on("dblclick", function (d) {
+				if(d.isPinned === undefined || d.isPinned === false) {
+					d3.select('#' + d.DOMID).attr({"style": "fill:lightblue"});
+					d.fixed |= 16;
+					d.isPinned = true;
+				}
+				else {
+					d3.select('#' + d.DOMID).attr({"style": "fill:white"});
+					d.fixed &= ~16;
+					d.isPinned = false;
+				}
+			})
 			.on("mouseover", function (d) { 
-														if(d.error) {
-																NETWORK.TOOLTIP.showToolTip(d,d3.event,d.validationError);
-															}
-															else {
-																NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip);
-															}
-														})
+											if(d.error) {
+													NETWORK.TOOLTIP.showToolTip(d,d3.event,d.validationError);
+												}
+												else {
+													NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip);
+												}
+											})
 			.on("mouseout", function (d) { NETWORK.TOOLTIP.hideToolTip(d); })
 			.call(cola.drag));
 	};
 	
 	NETWORK.GRAPH.Nodes.prototype.getNodeCenterUI = function(nodesGroupTag) {
-		 (nodesGroupTag.append("circle").attr("class", "node busIcon")
-														.classed("OffStatus", function(d) { if(parseInt(d.status) === 0) { return true; }	})
-														.attr("id",function (d) { d["DOMID"] = ("bus" + d.bus_i); return d.DOMID ; })
-														.attr("r", VIEWS.SharedFunctionality.R)
-														.on("mouseover", function (d) { 
-															if(d.error) {
-																NETWORK.TOOLTIP.showToolTip(d,d3.event,d.validationError);
-															}
-															else {
-																NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip);
-															}
-														})
-														.on("mouseout", function (d) { NETWORK.TOOLTIP.hideToolTip(d); }));
+		 (nodesGroupTag.append("circle")
+			.attr("class", "node busIcon")
+			.classed("OffStatus", function(d) { if(parseInt(d.status) === 0) { return true; }	})
+			.attr("id",function (d) { d["DOMID"] = ("bus" + d.bus_i); return d.DOMID; })
+			.attr("r", VIEWS.SharedFunctionality.R)
+			.on("mouseover", function (d) { 
+				if(d.error) {
+					NETWORK.TOOLTIP.showToolTip(d,d3.event,d.validationError);
+				}
+				else {
+					NETWORK.TOOLTIP.showToolTip(d,d3.event,NETWORK.RULES.nodeToolTip);
+				}
+			})
+			.on("mouseout", function (d) { NETWORK.TOOLTIP.hideToolTip(d); }));
 	};
 	
 	NETWORK.GRAPH.Nodes.prototype.tick = function () {		
