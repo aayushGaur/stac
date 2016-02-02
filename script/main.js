@@ -39,7 +39,7 @@ function drawGraph(event) {
 				parserError = true;
 		}
 		/*Logging NETWORK_OBJECTS for reference purpose.*/
-		//console.log(NETWORK_OBJECTS);
+		console.log(NETWORK_OBJECTS);
 		
 		
 		/*var e1, e2, e3, e4, e5;

@@ -154,38 +154,38 @@
 			 
 		line.attr("x1", function (d) {
 			if(edgeIndex%2 !== 0){
-					d["x1"] = vectorCalc.x1 + (orthoVector1.x * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+					d["x1"] = (vectorCalc.x1 + (orthoVector1.x * VIEWS.SharedFunctionality.R/2 * (edgeIndex)));
 			}
 			else {
-				d["x1"] = vectorCalc.x1 + (orthoVector2.x * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+				d["x1"] = (vectorCalc.x1 + ((orthoVector2.x * VIEWS.SharedFunctionality.R/2 * (edgeIndex/2))));
 			}
 			return d.x1;
 		})
 		.attr("y1", function (d) { 
 			if(edgeIndex%2 !== 0){
-				d["y1"] = vectorCalc.y1 + (orthoVector1.y * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+				d["y1"] = vectorCalc.y1 + (orthoVector1.y * VIEWS.SharedFunctionality.R/2 * (edgeIndex));
 			}
 			else {
-				d["y1"] = vectorCalc.y1 + (orthoVector2.y * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+				d["y1"] = (vectorCalc.y1 + (orthoVector2.y * VIEWS.SharedFunctionality.R/2 * edgeIndex/2));
 			}
 			
 			return d.y1;
 		})
 		.attr("x2", function (d) { 
 			if(edgeIndex%2 !== 0){
-				d["x2"]  = vectorCalc.x2 + (orthoVector1.x * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+				d["x2"]  = (vectorCalc.x2 + (orthoVector1.x * VIEWS.SharedFunctionality.R/2 * (edgeIndex)));
 			}
 			else {
-				d["x2"]  = vectorCalc.x2 + (orthoVector2.x * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+				d["x2"]  = (vectorCalc.x2 + ((orthoVector2.x * VIEWS.SharedFunctionality.R/2 * (edgeIndex/2))));
 			}
 			return d.x2;
 		})
 		.attr("y2", function (d) { 
 			if(edgeIndex%2 !== 0){
-				d["y2"] =  vectorCalc.y2 + (orthoVector1.y * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+				d["y2"] =  (vectorCalc.y2 + (orthoVector1.y * VIEWS.SharedFunctionality.R/2 * (edgeIndex)));
 			}
 			else {
-				d["y2"] = vectorCalc.y2 + (orthoVector2.y * VIEWS.SharedFunctionality.R/2 * edgeIndex);
+				d["y2"] = (vectorCalc.y2 + ((orthoVector2.y * VIEWS.SharedFunctionality.R/2 * (edgeIndex/2))));
 			}
 			return d.y2;
 		}).attr("zoomPointX", function (d) { return (d.x1 + d.x2)/2;}).attr("zoomPointY", function (d) {return (d.y1 + d.y2)/2; }	);
