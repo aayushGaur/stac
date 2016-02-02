@@ -21,7 +21,7 @@ stac is a web-based tool that is aimed at helping power system researchers to un
 
 ## Upgrades/Updates
 
-### Partial fixed positions in the graph (Completed)
+### Bus Locking (Completed)
 - Double click a node to fix it's position in the graph (The fill color will turn light blue).
 - Double click a node (with fill color blue) to unfix it's position.
 
