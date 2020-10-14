@@ -152,7 +152,10 @@
 						
 						for(propIndexer = 0; propIndexer < objProperties.length; propIndexer++)
 						{
-							actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer]).toString());
+							if (propIndexer < eachObjectData.length)
+								actualDataObj[objProperties[propIndexer]] = this.beautifyValue((eachObjectData[propIndexer]).toString());
+							else
+								actualDataObj[objProperties[propIndexer]] = 0
 						}
 						dataObjectWrapper.dataObjList.push(actualDataObj);
 					}		
